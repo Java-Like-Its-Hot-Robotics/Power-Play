@@ -45,4 +45,25 @@ public class BotConfig {
         rightBack.setDirection (DcMotor.Direction.REVERSE);
 
     }
+    public void stopDrive(){
+        leftFront.setPower(0);
+        leftBack.setPower(0);
+        rightFront.setPower(0);
+        rightBack.setPower(0);
+    }
+    public void drive(float foward, float strafe, float rotateLeft, float rotateRight){
+        double turn= -rotateLeft+ rotateRight;
+        double denominator= Math.max(Math.abs(strafe)+Math.abs(foward)+Math.abs(turn),1);
+        double frontLeftPower= (strafe+foward+turn)/denominator;
+        double backLeftPower= (strafe-foward+turn)/denominator;
+        double frontRightPower= (strafe-foward-turn)/denominator;
+        double backRightPower= (strafe+foward-turn)/denominator;
+
+        leftFront.setPower(frontLeftPower);
+        leftBack.setPower(backLeftPower);
+        rightFront.setPower(frontRightPower);
+        rightBack.setPower(backRightPower);
+    }
+
+
 }
