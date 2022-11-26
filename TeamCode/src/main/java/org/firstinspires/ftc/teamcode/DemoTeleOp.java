@@ -14,6 +14,10 @@ public class DemoTeleOp extends LinearOpMode{
         robot.init(hardwareMap);
 
         robot.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.left_trigger, gamepad1.right_trigger);
+
+        telemetry.addLine("Has Cone: " + robot.hasCone());
+        telemetry.update();
+
     }
 
 }

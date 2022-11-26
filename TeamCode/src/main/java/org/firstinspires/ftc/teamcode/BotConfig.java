@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /*
@@ -18,12 +19,15 @@ public class BotConfig {
     public DcMotor rightFront = null;
     public DcMotor rightBack = null;
 
+    /* Defining Sensors */
+    public TouchSensor octopusTouch = null;
+
     /* local OpMode members. */
-    HardwareMap hwMap           =  null;
-    private ElapsedTime period  = new ElapsedTime();
+    HardwareMap hwMap = null;
+    private ElapsedTime period = new ElapsedTime();
 
     /* Constructor */
-    public BotConfig(){
+    public BotConfig() {
 
     }
 
@@ -39,25 +43,28 @@ public class BotConfig {
         rightBack = hwMap.get(DcMotor.class, "BackRight");
 
         // Keep motor direction constant
-        leftFront.setDirection (DcMotor.Direction.FORWARD);
-        leftBack.setDirection  (DcMotor.Direction.FORWARD);
+        leftFront.setDirection(DcMotor.Direction.FORWARD);
+        leftBack.setDirection(DcMotor.Direction.FORWARD);
         rightFront.setDirection(DcMotor.Direction.REVERSE);
-        rightBack.setDirection (DcMotor.Direction.REVERSE);
+        rightBack.setDirection(DcMotor.Direction.REVERSE);
+
 
     }
-    public void stopDrive(){
+
+    public void stopDrive() {
         leftFront.setPower(0);
         leftBack.setPower(0);
         rightFront.setPower(0);
         rightBack.setPower(0);
     }
-    public void drive(float foward, float strafe, float rotateLeft, float rotateRight){
-        double turn= -rotateLeft+ rotateRight;
-        double denominator= Math.max(Math.abs(strafe)+Math.abs(foward)+Math.abs(turn),1);
-        double frontLeftPower= (strafe+foward+turn)/denominator;
-        double backLeftPower= (strafe-foward+turn)/denominator;
-        double frontRightPower= (strafe-foward-turn)/denominator;
-        double backRightPower= (strafe+foward-turn)/denominator;
+
+    public void drive(float foward, float strafe, float rotateLeft, float rotateRight) {
+        double turn = -rotateLeft + rotateRight;
+        double denominator = Math.max(Math.abs(strafe) + Math.abs(foward) + Math.abs(turn), 1);
+        double frontLeftPower = (strafe + foward + turn) / denominator;
+        double backLeftPower = (strafe - foward + turn) / denominator;
+        double frontRightPower = (strafe - foward - turn) / denominator;
+        double backRightPower = (strafe + foward - turn) / denominator;
 
         leftFront.setPower(frontLeftPower);
         leftBack.setPower(backLeftPower);
@@ -65,5 +72,7 @@ public class BotConfig {
         rightBack.setPower(backRightPower);
     }
 
-
+    public boolean hasCone() {
+        return octopusTouch.isPressed();
+    }
 }
