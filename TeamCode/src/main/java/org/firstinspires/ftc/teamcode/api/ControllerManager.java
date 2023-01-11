@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.api;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import static org.firstinspires.ftc.teamcode.api.ControllerKey.*;
 
@@ -10,9 +13,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+//FIXME: Refactor into a more unified event dispatcher and turn this into something that raises
+//       Events that are related to keypresses, and the AbstractEventDispatcher determines what
+//       It should send to its subscribers (MEDIATOR PATTERN)
 public abstract class ControllerManager {
     private Multimap<KeyEvent, Binding> bindings;
     private Gamepad gamepad;
+
+    public ControllerManager() {
+        bindings = MultimapBuilder.hashKeys().arrayListValues().build();  //MultimapBuilder.ListMultimapBuilder<KeyEvent, Binding>() {
+
+    }
 
     public ControllerManager bind(Binding binding, KeyEvent key) {
         bindings.put(key, binding);
