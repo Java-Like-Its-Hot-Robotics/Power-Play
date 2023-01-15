@@ -1,5 +1,5 @@
 package org.firstinspires.ftc.teamcode.api;
 
-public interface RobotEventMediatorI {
+public interface IRobotEventMediator {
     void notify(RobotEvent robotEvent);
 }

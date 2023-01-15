@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.api.AbstractEventDispatcher;
 import org.firstinspires.ftc.teamcode.api.AbstractEventListenerManager;
 import org.firstinspires.ftc.teamcode.api.DefaultControllerManager;
 import org.firstinspires.ftc.teamcode.api.RobotEvent;
-import org.firstinspires.ftc.teamcode.api.RobotEventListenerI;
+import org.firstinspires.ftc.teamcode.api.IRobotEventListener;
 import org.junit.Test;
 
 import java.util.concurrent.ArrayBlockingQueue;
@@ -20,7 +20,7 @@ public class DefaultControllerManagerTest {
     public void testOutput() {
         Gamepad gamepad = new Gamepad();
         AbstractControllerManager cm = new DefaultControllerManager(gamepad);
-        Multimap<RobotEvent, RobotEventListenerI> multimap = MultimapBuilder.hashKeys().arrayListValues().build();
+        Multimap<RobotEvent, IRobotEventListener> multimap = MultimapBuilder.hashKeys().arrayListValues().build();
         BlockingQueue<RobotEvent> queue = new ArrayBlockingQueue<RobotEvent>(10);
         AbstractEventListenerManager elm = new AbstractEventListenerManager(multimap){};
         AbstractEventDispatcher ed = new AbstractEventDispatcher(elm, queue) {

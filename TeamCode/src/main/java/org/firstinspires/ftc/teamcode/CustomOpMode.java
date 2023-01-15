@@ -20,10 +20,10 @@ public class CustomOpMode extends LinearOpMode {
 
         while(opModeIsActive()) {
             if(gamepad1.a) {
-                robot.servo.setPosition(robot.servo.getPosition() + 0.01);
+                robot.servo.setPosition(robot.servo.getPosition() + 0.001);
             }
             else if (gamepad1.b) {
-                robot.servo.setPosition(robot.servo.getPosition() - 0.01);
+                robot.servo.setPosition(robot.servo.getPosition() - 0.001);
             }
         }
     }

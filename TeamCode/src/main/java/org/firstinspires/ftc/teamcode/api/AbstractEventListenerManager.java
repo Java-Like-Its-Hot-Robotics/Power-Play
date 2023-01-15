@@ -5,22 +5,22 @@ import com.google.common.collect.Multimap;
 import java.util.Collection;
 
 public abstract class AbstractEventListenerManager {
-    private Multimap<RobotEvent, RobotEventListenerI> bindings;
+    private Multimap<RobotEvent, IRobotEventListener> bindings;
 
     private AbstractEventListenerManager() {}
 
-    public AbstractEventListenerManager(Multimap<RobotEvent, RobotEventListenerI> bindings) {
+    public AbstractEventListenerManager(Multimap<RobotEvent, IRobotEventListener> bindings) {
         this.bindings = bindings;
     }
 
-    public void register(RobotEventListenerI eventListenerI, RobotEvent key) {
+    public void register(IRobotEventListener eventListenerI, RobotEvent key) {
         bindings.put(key, eventListenerI);
     }
-    public void unregister(RobotEventListenerI binding, RobotEvent key) {
+    public void unregister(IRobotEventListener binding, RobotEvent key) {
         bindings.remove(key, binding);
     }
 
-    public Collection<RobotEventListenerI> getEventListeners(RobotEvent robotEvent) {
+    public Collection<IRobotEventListener> getEventListeners(RobotEvent robotEvent) {
         return bindings.get(robotEvent);
     }
 }
