@@ -17,6 +17,11 @@ public class ContinuousThreadManager {
     private Thread dispatchThread;
     private Runnable eventStep;
 
+    /**
+     * Do not use this constructor if you have any ability to provide a name for the thread.
+     * The string parameter in the alternative constructor is use
+     * @param eventStep
+     */
     public ContinuousThreadManager(Runnable eventStep) {
         this.eventStep = eventStep;
         this.dispatchThread = new Thread
@@ -24,6 +29,13 @@ public class ContinuousThreadManager {
                 , "Default ContinuousThreadManager Thread");
         this.dispatchThread.setDaemon(true);
 //        this.dispatchThread.start();
+    }
+    public ContinuousThreadManager(Runnable eventStep, String threadName) {
+        this.eventStep = eventStep;
+        this.dispatchThread = new Thread
+                ( this::eventLoop
+                , threadName);
+        this.dispatchThread.setDaemon(true);
     }
 
     public void startDispatch() {

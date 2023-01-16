@@ -8,8 +8,8 @@ import org.firstinspires.ftc.teamcode.api.AbstractControllerManager;
 import org.firstinspires.ftc.teamcode.api.AbstractEventDispatcher;
 import org.firstinspires.ftc.teamcode.api.AbstractEventListenerManager;
 import org.firstinspires.ftc.teamcode.api.DefaultControllerManager;
-import org.firstinspires.ftc.teamcode.api.RobotEvent;
 import org.firstinspires.ftc.teamcode.api.IRobotEventListener;
+import org.firstinspires.ftc.teamcode.api.RobotEvent;
 import org.junit.Test;
 
 import java.util.concurrent.ArrayBlockingQueue;

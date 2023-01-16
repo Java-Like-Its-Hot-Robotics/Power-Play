@@ -4,8 +4,12 @@ public abstract class ContinuousEventListener implements IRobotEventListener{
     private IRobotEventMediator mediator;
     private final ContinuousThreadManager threadManager;
 
-    public ContinuousEventListener() {
+    private ContinuousEventListener() {
         this.threadManager = new ContinuousThreadManager(this::eventStep);
+    }
+
+    public ContinuousEventListener(String name) {
+        this.threadManager = new ContinuousThreadManager(this::eventStep, name);
     }
 
     @Override
