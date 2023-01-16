@@ -1,6 +1,11 @@
-package org.firstinspires.ftc.teamcode.api;
+package org.firstinspires.ftc.teamcode.api.event.dispatcher;
 
 import androidx.annotation.NonNull;
+
+import org.firstinspires.ftc.teamcode.api.event.listener.IRobotEventListener;
+import org.firstinspires.ftc.teamcode.api.event.mediator.IRobotEventMediator;
+import org.firstinspires.ftc.teamcode.api.event.RobotEvent;
+import org.firstinspires.ftc.teamcode.api.event.listener.AbstractEventListenerManager;
 
 import java.util.concurrent.BlockingQueue;
 
@@ -25,42 +30,47 @@ public abstract class AbstractEventDispatcher implements IRobotEventMediator {
         dispatchThread.start();
     }
 
-    /**  Add an event to dispatch
+    /**  Raises an event to dispatch
      */
     public void notify(@NonNull RobotEvent robotEvent) {
-        eventsQueue.add(robotEvent);
-    }
-
-    private void dispatch(IRobotEventListener eventListenerI, RobotEvent robotEvent) {
-        eventListenerI.handleEvent(robotEvent, this);
-    }
-
-    //pull off eventqueue and dispatch. this should be in its own thread
-    private void dispatchLoop() {
+        //blocks if it cant put the event into the current queue
         try {
-            while(!dispatchThread.isInterrupted()) {
-                final RobotEvent event = eventsQueue.take();
-                for(IRobotEventListener listenerI : listenerManager.getEventListeners(event)) {
-                    dispatch(listenerI, event);
-                }
-                //someone asked to stop this thread
-                //set back the interrupt flag and
-                //quit the loop
-                Thread.currentThread().interrupt();
-            }
+            eventsQueue.put(robotEvent);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
+
+    protected void dispatch(IRobotEventListener eventListenerI, RobotEvent robotEvent) {
+        eventListenerI.handleEvent(robotEvent);
+    }
+
 
     public AbstractEventDispatcher register(IRobotEventListener eventListenerI, RobotEvent robotEvent) {
         eventListenerI.initHandshake(this);
         listenerManager.register(eventListenerI, robotEvent);
         return this;
     }
+    public AbstractEventDispatcher register(IRobotEventListener eventListenerI) {
+        eventListenerI.initHandshake(this);
+        listenerManager.register(eventListenerI, RobotEvent.NullEvent);
+        return this;
+    }
     public AbstractEventDispatcher unregister(IRobotEventListener eventListenerI, RobotEvent robotEvent) {
         listenerManager.unregister(eventListenerI, robotEvent);
         return this;
+    }
+
+    protected AbstractEventListenerManager getListenerManager() {
+        return listenerManager;
+    }
+
+    protected BlockingQueue<RobotEvent> getEventsQueue() {
+        return eventsQueue;
+    }
+
+    protected Thread getDispatchThread() {
+        return dispatchThread;
     }
 
     /**
@@ -69,19 +79,5 @@ public abstract class AbstractEventDispatcher implements IRobotEventMediator {
     public abstract void init();
     public abstract void start();
     public abstract void stop();
-//    public void check() {
-//        Iterator<IRobotEventListener> keyEventIterator = listenerManager.getEventListeners().iterator();
-//
-//        //For each key event, call all of its bound handlers with the key event in question and
-//        //the gamepad state
-//        while(keyEventIterator.hasNext()) {
-//            IRobotEventListener nextKeyEvent = keyEventIterator.next();
-//            Iterator<IRobotEventListener> bindingIterator = bindings.get(nextKeyEvent).iterator();
-//            while(bindingIterator.hasNext()) {
-//                IRobotEventListener nextBinding = bindingIterator.next();
-//                nextBinding.handleKey(nextKeyEvent, this);
-//            }
-//
-//        }
-//    }
+    protected abstract void dispatchLoop();
 }

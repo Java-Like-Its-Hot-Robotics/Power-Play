@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 @TeleOp(name = "Servo Test")
 public class CustomOpMode extends LinearOpMode {
 
-    BotConfig robot = new BotConfig();
+    BotConfig robot = new DefaultBotConfig();
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -20,10 +20,10 @@ public class CustomOpMode extends LinearOpMode {
 
         while(opModeIsActive()) {
             if(gamepad1.a) {
-                robot.servo.setPosition(robot.servo.getPosition() + 0.001);
+                robot.octopusServo.setPosition(robot.octopusServo.getPosition() + 0.001);
             }
             else if (gamepad1.b) {
-                robot.servo.setPosition(robot.servo.getPosition() - 0.001);
+                robot.octopusServo.setPosition(robot.octopusServo.getPosition() - 0.001);
             }
         }
     }

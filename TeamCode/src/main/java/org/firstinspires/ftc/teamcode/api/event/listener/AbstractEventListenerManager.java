@@ -1,6 +1,8 @@
-package org.firstinspires.ftc.teamcode.api;
+package org.firstinspires.ftc.teamcode.api.event.listener;
 
 import com.google.common.collect.Multimap;
+
+import org.firstinspires.ftc.teamcode.api.event.RobotEvent;
 
 import java.util.Collection;
 
@@ -20,7 +22,20 @@ public abstract class AbstractEventListenerManager {
         bindings.remove(key, binding);
     }
 
+    /**
+     *
+     * @param robotEvent event to search for
+     * @return all <code>IEventListener</code>s that are listening for the event
+     */
     public Collection<IRobotEventListener> getEventListeners(RobotEvent robotEvent) {
         return bindings.get(robotEvent);
+    }
+
+    /**
+     *
+     * @return all event listeners this manager knows of
+     */
+    public Collection<IRobotEventListener> getEventListeners() {
+        return bindings.values();
     }
 }
