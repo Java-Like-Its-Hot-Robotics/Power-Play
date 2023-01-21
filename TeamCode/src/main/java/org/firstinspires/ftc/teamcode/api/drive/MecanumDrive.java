@@ -6,16 +6,15 @@ import org.firstinspires.ftc.teamcode.BotConfig;
 import org.firstinspires.ftc.teamcode.api.event.RobotEvent;
 
 public class MecanumDrive extends DriveMode {
+    @SuppressWarnings("FieldCanBeLocal")
     private final double TOLERANCE = 0.1;
-    
+
     public MecanumDrive(Gamepad gamepad, BotConfig botConfig) {
         super(gamepad, botConfig);
     }
     @Override
     public void drive() {
         Gamepad gamepad = super.getGamepad();
-//        System.out.println("left stick x: " + gamepad.left_stick_x);
-//        System.out.println("left stick y: " + gamepad.left_stick_y);
         BotConfig robot = super.getConfig();
         double straif    =  gamepad.left_stick_y;
         double forward   = -gamepad.left_stick_x;

@@ -15,20 +15,20 @@ public class RegisteredEventDispatcher extends AbstractEventDispatcher {
 
     @Override
     protected void dispatchLoop() {
-        try {
-            while(!super.getDispatchThread().isInterrupted()) {
-                final RobotEvent event = super.getEventsQueue().take();
+//        try {
+//            while(!super.getDispatchThread().isInterrupted()) {
+                final RobotEvent event = super.getEventsQueue().remove();
                 for(IRobotEventListener listenerI : super.getListenerManager().getEventListeners(event)) {
                     dispatch(listenerI, event);
                 }
                 //someone asked to stop this thread
-                //set back the interrupt flag and
+                //set back the interrupt flag ad
                 //quit the loop
-                Thread.currentThread().interrupt();
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//                Thread.currentThread().interrupt();
+//            }
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override
@@ -40,6 +40,9 @@ public class RegisteredEventDispatcher extends AbstractEventDispatcher {
     public void start() {
         notify(RobotEvent.OpmodeStart);
     }
+
+    @Override
+    public void updateWhileStarted() {}
 
     @Override
     public void stop() {

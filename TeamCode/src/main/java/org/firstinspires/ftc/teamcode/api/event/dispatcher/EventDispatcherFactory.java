@@ -7,7 +7,10 @@ import org.firstinspires.ftc.robotcore.internal.collections.EvictingBlockingQueu
 import org.firstinspires.ftc.teamcode.api.event.listener.IRobotEventListener;
 import org.firstinspires.ftc.teamcode.api.event.RobotEvent;
 import org.firstinspires.ftc.teamcode.api.event.listener.AbstractEventListenerManager;
+import org.firstinspires.ftc.teamcode.api.event.listener.continuous.ContinuousEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -15,7 +18,8 @@ public class EventDispatcherFactory {
     private int capacity = 50;
     private BlockingQueue<RobotEvent> queue = new ArrayBlockingQueue<>(capacity);
     private Multimap<RobotEvent, IRobotEventListener> multimap = MultimapBuilder.hashKeys().arrayListValues().build();
-    private AbstractEventListenerManager elm = new AbstractEventListenerManager(multimap) {};
+    private List<ContinuousEventListener> continuousListeners = new ArrayList<>(0);
+    private AbstractEventListenerManager elm = new AbstractEventListenerManager(multimap, continuousListeners) {};
 
     private boolean isGlobal = true;
 
@@ -51,14 +55,6 @@ public class EventDispatcherFactory {
     }
 
     //FIXME does not properly register with the generated AbstractEventDispatcher
-//    public EventDispatcherFactory register(IRobotEventListener eventListener) {
-////        elm.register(eventListener, RobotEvent.NullEvent);
-//        return this;
-//    }
-//    public EventDispatcherFactory register(IRobotEventListener eventListener, RobotEvent event) {
-////        elm.register(eventListener, event);
-//        return this;
-//    }
 
     public AbstractEventDispatcher build() {
         if (isGlobal) {

@@ -76,12 +76,15 @@ public abstract class BotConfig {
         ////Motors
         octopusMotor = hwMap.get(DcMotor.class, "octopusMotor");
 //        octopusMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        octopusMotor.setTargetPosition(octopusMotor.getCurrentPosition());
-        octopusMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        octopusMotor.setTargetPosition(0);
+        octopusMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        octopusMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION); //RUN TO POSITION will mess everything up!
+        octopusMotor.setPower(0.5);
+        octopusMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         ////Servo
         octopusServo = hwMap.get(Servo.class, "octopusServo");
         ////Sensors
-//        octoTouchSensor = hwMap.get(RevTouchSensor.class, "octopusTouchSensor");
+        octoTouchSensor = hwMap.get(RevTouchSensor.class, "octopusTouchSensor");
         //IMU SETUP
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
@@ -109,19 +112,6 @@ public abstract class BotConfig {
         rightFront.setPower(0);
         rightBack.setPower(0);
     }
-//    public void drive(float foward, float strafe, float rotateLeft, float rotateRight){
-//        double turn= -rotateLeft+ rotateRight;
-//        double denominator= Math.max(Math.abs(strafe)+Math.abs(foward)+Math.abs(turn),1);
-//        double frontLeftPower= (strafe+foward+turn)/denominator;
-//        double backLeftPower= (strafe-foward+turn)/denominator;
-//        double frontRightPower= (strafe-foward-turn)/denominator;
-//        double backRightPower= (strafe+foward-turn)/denominator;
-//
-//        leftFront.setPower(frontLeftPower);
-//        leftBack.setPower(backLeftPower);
-//        rightFront.setPower(frontRightPower);
-//        rightBack.setPower(backRightPower);
-//    }
 
 
 }

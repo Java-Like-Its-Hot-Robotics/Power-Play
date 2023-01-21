@@ -30,6 +30,7 @@ public class ContinuousThreadManager {
         this.dispatchThread = new Thread
                 ( this::eventLoop
                 , "Default ContinuousThreadManager Thread");
+        this.dispatchThread.setPriority(9);
         this.dispatchThread.setDaemon(true);
 
         startDispatch();

@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode.api.event.dispatcher;
 import org.firstinspires.ftc.teamcode.api.event.listener.IRobotEventListener;
 import org.firstinspires.ftc.teamcode.api.event.RobotEvent;
 import org.firstinspires.ftc.teamcode.api.event.listener.AbstractEventListenerManager;
+import org.firstinspires.ftc.teamcode.api.event.listener.continuous.ContinuousEventListener;
 
+import java.util.Iterator;
 import java.util.concurrent.BlockingQueue;
 
 /**
@@ -17,34 +19,35 @@ public class GlobalEventDispatcher extends AbstractEventDispatcher {
 
     @Override
     protected void dispatchLoop() {
-        try {
-            while(!super.getDispatchThread().isInterrupted()) {
-                final RobotEvent event = super.getEventsQueue().take();
-                for(IRobotEventListener listenerI : super.getListenerManager().getEventListeners()) {
-                    dispatch(listenerI, event);
-                }
-                //someone asked to stop this thread
-                //set back the interrupt flag and
-                //quit the loop
+//        final RobotEvent event = super.getEventsQueue().remove();
+        for (RobotEvent event : super.getEventsQueue()) {
+            for (IRobotEventListener listenerI : super.getListenerManager().getEventListeners()) {
+                dispatch(listenerI, event);
+                super.getEventsQueue().poll();
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            Thread.currentThread().interrupt();
+        }
+        //go through all of the eventListeners that NEED to get triggered
+        for(ContinuousEventListener contListener : super.getListenerManager().getContinuousListeners()) {
+            contListener.eventStep();
         }
     }
 
     @Override
     public void init() {
-
+        notify(RobotEvent.OpmodeInit);
     }
 
     @Override
     public void start() {
-
+        notify(RobotEvent.OpmodeStart);
+    }
+    @Override
+    public void updateWhileStarted() {
+        dispatchLoop();
     }
 
     @Override
     public void stop() {
-
+        notify(RobotEvent.OpmodeStop);
     }
 }

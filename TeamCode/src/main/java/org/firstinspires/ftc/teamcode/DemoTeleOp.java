@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.teamcode.api.controller.ControllerKey.*;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -18,7 +20,7 @@ import org.firstinspires.ftc.teamcode.api.sensor.TouchSensor;
 @TeleOp(name = "Main TeleOp")
 public class DemoTeleOp extends LinearOpMode {
 
-    private ElapsedTime runtime = new ElapsedTime();
+//    private final ElapsedTime runtime = new ElapsedTime();
 
     BotConfig robot = new DefaultBotConfig();
 
@@ -29,9 +31,15 @@ public class DemoTeleOp extends LinearOpMode {
         robot.init(hardwareMap);
 
         //CONTROLLER
-        AbstractControllerListener controllerListener = new DefaultControllerListener(gamepad1);
+        AbstractControllerListener controllerListener = new DefaultControllerListener(gamepad1)
+                .bind(RobotEvent.LiftRaiseToLow,        A)
+                .bind(RobotEvent.LiftRaiseToMedium,     B)
+                .bind(RobotEvent.LiftRaiseToHigh,       Y)
+//                .bind(RobotEvent.ManualOctoServoToggle, X);
+                .bind(RobotEvent.ManualPickup, X)
+                .bind(RobotEvent.ManualDrop, UP);
         //DRIVE MODE
-        DriveMode driveMode = new MecanumDrive(gamepad1, robot);
+        MecanumDrive driveMode = new MecanumDrive(gamepad1, robot);
         //SENSORS
 //        TouchSensor touchSensor = new TouchSensor(robot.octoTouchSensor);
         //Lift Management
@@ -42,21 +50,62 @@ public class DemoTeleOp extends LinearOpMode {
 
         //DISPATCHER
         AbstractEventDispatcher ed = new EventDispatcherFactory()
-                .global(true)
+                .global(true) //this is necessary, as the non-global version is buggy/annoying
                 .build()
                 .register(controllerListener)
-                .register(driveMode)
+//                .register(driveMode)
 //                .register(touchSensor)
                 .register(octopusServo)
                 .register(octopusMotor);
 
-        ed.notify(RobotEvent.OpmodeInit);
+        ed.init();
 
         waitForStart();
 
+        ed.start();
+        final int CARRY_POS = 150;
+        final int PICKUP_POS = -10;
+        final int LOW_HEIGHT = 250;
+        final int MED_HEIGHT = 500;
+        final int HIGH_HEIGHT = 750;
+        final double openPos = robot.octopusServo.getPosition();
+        final double closedPos = openPos + 0.3;
+
+        boolean isExpanded = false;
+
         while(opModeIsActive()) {
-            ed.notify(RobotEvent.OpmodeStart);
+            driveMode.drive();
+            ed.updateWhileStarted();
+//            if(gamepad1.a) {
+//                robot.octopusMotor.setTargetPosition(LOW_HEIGHT);
+//            }
+//            else if (gamepad1.b) {
+//                robot.octopusMotor.setTargetPosition(MED_HEIGHT);
+//            }
+//            else if (gamepad1.y) {
+//                robot.octopusMotor.setTargetPosition(HIGH_HEIGHT);
+//            }
+//            else if (gamepad1.dpad_down) {
+//                robot.octopusMotor.setTargetPosition(PICKUP_POS);
+//            }
+//            else if (gamepad1.x) {
+//                if (isExpanded) {
+//                    robot.octopusServo.setPosition(closedPos);
+//                    telemetry.addData(String.valueOf(robot.octopusServo.getPosition()), "");
+//                    isExpanded = false;
+//                }
+//                else {
+//                    robot.octopusServo.setPosition(openPos);
+//                    telemetry.addData(String.valueOf(robot.octopusServo.getPosition()), "");
+//                    isExpanded = true;
+//                }
+//                telemetry.update();
+//            }
         }
+
+        //end of opmode; loop exited
+//        ed.kill();
+//        ed.stop();
 
     }
 

@@ -10,14 +10,14 @@ import java.util.concurrent.Semaphore;
 public abstract class ContinuousEventListener implements IRobotEventListener {
     private IRobotEventMediator mediator;
     private CountDownLatch mediatorLatch = new CountDownLatch(1);
-    private final ContinuousThreadManager threadManager;
+//    private final ContinuousThreadManager threadManager;
 
     private ContinuousEventListener() {
-        this.threadManager = new ContinuousThreadManager(this::eventStep, mediatorLatch);
+//        this.threadManager = new ContinuousThreadManager(this::eventStep, mediatorLatch);
     }
 
     public ContinuousEventListener(String name) {
-        this.threadManager = new ContinuousThreadManager(this::eventStep, name, mediatorLatch);
+//        this.threadManager = new ContinuousThreadManager(this::eventStep, name, mediatorLatch);
     }
 
     @Override

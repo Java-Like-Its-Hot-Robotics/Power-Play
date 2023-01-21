@@ -15,10 +15,10 @@ import java.util.List;
 public class DefaultControllerListener extends AbstractControllerListener {
     public DefaultControllerListener(Gamepad gamepad) {
         super(gamepad);
-        super   .bind(RobotEvent.ManualDrop, X)
-                .bind(RobotEvent.LiftRaiseToLow, A)
-                .bind(RobotEvent.LiftRaiseToMedium, B)
-                .bind(RobotEvent.LiftRaiseToHigh, Y);
+//        super   .bind(RobotEvent.ManualDrop, X)
+//                .bind(RobotEvent.LiftRaiseToLow, A)
+//                .bind(RobotEvent.LiftRaiseToMedium, B)
+//                .bind(RobotEvent.LiftRaiseToHigh, Y);
     }
 
     public void eventStep() {

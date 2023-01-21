@@ -28,11 +28,12 @@ public class DefaultControllerManagerTest {
           .register(driveMode);
 
         ed.notify(RobotEvent.OpmodeStart);
+        ed.updateWhileStarted();
         System.out.println("End of test program");
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(10000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
     }
 }

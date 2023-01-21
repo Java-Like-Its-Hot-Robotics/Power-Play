@@ -37,27 +37,6 @@ public abstract class AbstractControllerListener extends ContinuousEventListener
         return this;
     }
 
-//    public void eventStep() {
-//        //Update the drive so those inputs can take effect
-//        super.getMediator().notify(RobotEvent.DriveUpdate);
-//        try {
-//            Gamepad oldGamepad = new Gamepad();
-//            oldGamepad.copy(gamepad);
-//            //Check if any controls have changed to prevent needless events
-//            List<ControllerKey> keys = compareGamepad(gamepad, oldGamepad);
-//            for (ControllerKey key : keys) {
-//                //find all events associated with the changed keys
-//                Collection<RobotEvent> boundEvents = bindings.get(key);
-//                for(RobotEvent boundEvent : boundEvents) {
-//                    super.getMediator().notify(boundEvent);
-//                }
-//                oldGamepad.copy(gamepad);
-//            }
-//        } catch (RobotCoreException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     public void handleEvent(RobotEvent robotEvent) {
         //Controller doesn't need to do anything with this
     }

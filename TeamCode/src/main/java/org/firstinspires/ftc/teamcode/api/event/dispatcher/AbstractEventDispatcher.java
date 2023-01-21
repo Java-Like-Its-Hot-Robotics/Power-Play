@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.api.event.mediator.IRobotEventMediator;
 import org.firstinspires.ftc.teamcode.api.event.RobotEvent;
 import org.firstinspires.ftc.teamcode.api.event.listener.AbstractEventListenerManager;
 
+import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -17,37 +18,37 @@ public abstract class AbstractEventDispatcher implements IRobotEventMediator {
     private AbstractEventListenerManager listenerManager;
     //TODO: Ensure the nullary constructor puts an initial heartbeat ping to give each Listener its
     //      instance variable
-    private BlockingQueue<RobotEvent> eventsQueue;
-    private Thread dispatchThread;
-    private ExecutorService dispatchPool = Executors.newFixedThreadPool(10);
+    private Queue<RobotEvent> eventsQueue;
+//    private Thread dispatchThread;
+//    private ExecutorService dispatchPool = Executors.newFixedThreadPool(2);
 
     private AbstractEventDispatcher() {}
 
     public AbstractEventDispatcher(AbstractEventListenerManager listenerManager, BlockingQueue<RobotEvent> eventsQueue) {
         this.listenerManager = listenerManager;
         this.eventsQueue = eventsQueue;
-        this.dispatchThread = new Thread
-                (this::dispatchLoop
-                , "Event Dispatch Loop");
-        dispatchThread.setDaemon(true);
-        dispatchThread.start();
+//        this.dispatchThread = new Thread
+//                (this::dispatchLoop
+//                , "Event Dispatch Loop");
+//        dispatchThread.setDaemon(true);
+//        dispatchThread.setPriority(9);
+//        dispatchThread.start();
     }
 
     /**  Raises an event to dispatch
      */
     public void notify(@NonNull RobotEvent robotEvent) {
-        //blocks if it cant put the event into the current queue
-        try {
-            eventsQueue.put(robotEvent);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        eventsQueue.add(robotEvent);
+//        try {
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
     }
 
     protected void dispatch(IRobotEventListener eventListenerI, RobotEvent robotEvent) {
         //Dispatching otherwise happens in sequential order. We don't want unbounded
         //concurrency, so a thread pool works well.
-       dispatchPool.submit(() -> eventListenerI.handleEvent(robotEvent));
+       eventListenerI.handleEvent(robotEvent);
     }
 
 
@@ -70,19 +71,26 @@ public abstract class AbstractEventDispatcher implements IRobotEventMediator {
         return listenerManager;
     }
 
-    protected BlockingQueue<RobotEvent> getEventsQueue() {
+    protected Queue<RobotEvent> getEventsQueue() {
         return eventsQueue;
     }
 
-    protected Thread getDispatchThread() {
-        return dispatchThread;
-    }
+//    protected Thread getDispatchThread() {
+//        return dispatchThread;
+//    }
 
     /**
      * Send an init event. Useful for OpModes.
      */
     public abstract void init();
     public abstract void start();
+
+    public abstract void updateWhileStarted();
+
     public abstract void stop();
+//    public void kill() {
+//        dispatchThread = null;
+//        dispatchPool.shutdown();
+//    }
     protected abstract void dispatchLoop();
 }

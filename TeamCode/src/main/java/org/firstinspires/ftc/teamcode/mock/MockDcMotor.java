@@ -25,8 +25,6 @@ public class MockDcMotor implements DcMotor {
 
     @Override
     public void setPower(double power) {
-//        String message = "setting dcmotor power to " + power;
-//        System.out.println(message);
     }
 
     @Override

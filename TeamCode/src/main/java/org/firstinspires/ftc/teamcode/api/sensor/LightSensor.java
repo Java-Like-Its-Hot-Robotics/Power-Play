@@ -5,6 +5,7 @@ import com.qualcomm.hardware.rev.RevColorSensorV3;
 import org.firstinspires.ftc.teamcode.api.event.RobotEvent;
 import org.firstinspires.ftc.teamcode.api.event.listener.continuous.ContinuousEventListener;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class LightSensor extends ContinuousEventListener {
     private RevColorSensorV3 colorSensor;
 

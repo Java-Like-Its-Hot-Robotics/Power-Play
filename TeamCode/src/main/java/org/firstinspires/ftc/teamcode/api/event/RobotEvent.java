@@ -15,11 +15,13 @@ public enum RobotEvent {
     OctoServoExpanded,
     OctoServoCompressed,
     //Lift
+    ////Statuses
     LiftReachedPickup,
     LiftReachedCarry,
     LiftReachedLow,
     LiftReachedMedium,
     LiftReachedHigh,
+    ////Commands
     LiftRaiseToCarry,
     LiftRaiseToLow,
     LiftRaiseToMedium,
@@ -27,5 +29,6 @@ public enum RobotEvent {
     //Manual
     ManualDrop,
     ManualPickup,
-    ConeguideLightSensorDetected
+    ManualOctoServoToggle,
+    ConeGuideLightSensorDetected
 }
