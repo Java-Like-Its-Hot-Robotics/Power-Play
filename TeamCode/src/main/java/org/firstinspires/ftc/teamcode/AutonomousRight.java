@@ -1,10 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
-        import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-        import com.qualcomm.robotcore.util.ElapsedTime;
+    import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+    import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class SampleAutonomous extends LinearOpMode{
-
+public class AutonomousRight extends LinearOpMode{
     private ElapsedTime runtime = new ElapsedTime();
     BotConfig robot = new BotConfig(){};
 
@@ -16,7 +15,9 @@ public class SampleAutonomous extends LinearOpMode{
         waitForStart();
 
         while (opModeIsActive()) {
-            robot.drive(0, -1, 0, 0);
+            // Move left when robot is started
+            robot.drive(0, 1, 0, 0);
+            // Stop 1 strafe right from starting point
             sleep(5000);
             robot.stopDrive();
         }
