@@ -36,12 +36,12 @@ public class DemoTeleOp extends LinearOpMode {
                 .bind(RobotEvent.LiftRaiseToMedium,     B)
                 .bind(RobotEvent.LiftRaiseToHigh,       Y)
 //                .bind(RobotEvent.ManualOctoServoToggle, X);
-                .bind(RobotEvent.ManualPickup, X)
-                .bind(RobotEvent.ManualDrop, UP);
+                .bind(RobotEvent.LiftRaiseToPickup, DOWN)
+                .bind(RobotEvent.ManualOctoServoToggle, X);
         //DRIVE MODE
         MecanumDrive driveMode = new MecanumDrive(gamepad1, robot);
         //SENSORS
-//        TouchSensor touchSensor = new TouchSensor(robot.octoTouchSensor);
+        TouchSensor touchSensor = new TouchSensor(robot.octoTouchSensor);
         //Lift Management
         ////Octopus Servo
         OctopusServo octopusServo = new OctopusServo(robot.octopusServo);
@@ -53,7 +53,7 @@ public class DemoTeleOp extends LinearOpMode {
                 .global(true) //this is necessary, as the non-global version is buggy/annoying
                 .build()
                 .register(controllerListener)
-//                .register(driveMode)
+                .register(driveMode)
 //                .register(touchSensor)
                 .register(octopusServo)
                 .register(octopusMotor);

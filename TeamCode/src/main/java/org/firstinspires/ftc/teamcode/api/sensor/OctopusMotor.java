@@ -12,9 +12,9 @@ public class OctopusMotor extends DiscreteEventListener {
     private final DcMotor motor;
     private final int CARRY_POS = 150;
     private final int PICKUP_POS = 0;
-    private final int LOW_HEIGHT = 250;
-    private final int MED_HEIGHT = 500;
-    private final int HIGH_HEIGHT = 750;
+    private final int LOW_HEIGHT = 390;
+    private final int MED_HEIGHT = 750;
+    private final int HIGH_HEIGHT = 850;
     private static AtomicInteger storedHeight = new AtomicInteger(0);
 
     public OctopusMotor(DcMotor motor) {
@@ -50,9 +50,17 @@ public class OctopusMotor extends DiscreteEventListener {
 //                super.notify(RobotEvent.LiftReachedMedium);
                 break;
             case LiftRaiseToHigh:
-                if(motor.isBusy()) break;
+//                if(motor.isBusy()) break;
                 motor.setTargetPosition(HIGH_HEIGHT);
 //                super.notify(RobotEvent.LiftReachedHigh);
+                break;
+            case LiftRaiseToPickup:
+//                if(motor.isBusy()) break;
+                motor.setTargetPosition(-10);
+            case OctoTouchSensorPressed:
+                //stop the motor where it is
+//                motor.setTargetPosition(motor.getCurrentPosition());
+//                super.notify(RobotEvent.ManualOctoServoToggle);
                 break;
         }
     }

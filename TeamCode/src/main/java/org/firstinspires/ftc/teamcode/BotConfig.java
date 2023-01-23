@@ -79,7 +79,7 @@ public abstract class BotConfig {
         octopusMotor.setTargetPosition(0);
         octopusMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         octopusMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION); //RUN TO POSITION will mess everything up!
-        octopusMotor.setPower(0.5);
+        octopusMotor.setPower(0.6);
         octopusMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         ////Servo
         octopusServo = hwMap.get(Servo.class, "octopusServo");

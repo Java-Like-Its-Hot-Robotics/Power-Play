@@ -12,22 +12,24 @@ public class OctopusServo extends DiscreteEventListener {
     private final double DROP;
     private final double HOLD;
     private static final double TOLERANCE = 0.02;
-    private static final double TIMEOUT = 1000; //milliseconds
+    private static final double TIMEOUT = 500; //milliseconds
     private boolean isExpanded;
+    private static double pressTime = System.currentTimeMillis();
 
     public OctopusServo(Servo servo) {
         this.servo = servo;
         //TODO: make this a static value (with debugger)
-        DROP = -0.4;//servo.getPosition();
-        HOLD = 0.3;
+        DROP = -0.5;//servo.getPosition();
+        HOLD = 0.3; //0.4
         isExpanded = false;
+
     }
 
     @Override
     public void handleEvent(RobotEvent robotEvent) {
         switch(robotEvent) {
-            case ManualPickup:
             case LiftReachedPickup:
+            case ManualPickup:
                 servo.setPosition(HOLD);
 //                pauseUntil(HOLD);
                 isExpanded = true;
@@ -42,18 +44,25 @@ public class OctopusServo extends DiscreteEventListener {
                 super.notify(OctoServoCompressed);
                 break;
             case ManualOctoServoToggle:
+                if(!pauseUntil(TIMEOUT)) break;
                 if (isExpanded) {
                     super.notify(ManualDrop);
                 }
                 else {
                     super.notify(ManualPickup);
                 }
+            case OctoTouchSensorPressed:
+                super.notify(ManualOctoServoToggle);
+
             default: break;
         }
     }
 
-    private void pauseUntil(double position) {
-        double timeout = System.currentTimeMillis() + TIMEOUT;
-        while (Math.abs(servo.getPosition() - position) < TOLERANCE || System.currentTimeMillis() > timeout);
-    }
+//    private boolean pauseUntil(double timeout) {
+//        if(System.currentTimeMillis() > pressTime + timeout) {
+//            pressTime = System.currentTimeMillis();
+//            return true;
+//        }
+//        return false;
+//    }
 }

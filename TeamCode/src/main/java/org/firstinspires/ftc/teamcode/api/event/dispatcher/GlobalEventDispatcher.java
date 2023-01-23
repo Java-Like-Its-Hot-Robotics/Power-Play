@@ -23,8 +23,8 @@ public class GlobalEventDispatcher extends AbstractEventDispatcher {
         for (RobotEvent event : super.getEventsQueue()) {
             for (IRobotEventListener listenerI : super.getListenerManager().getEventListeners()) {
                 dispatch(listenerI, event);
-                super.getEventsQueue().poll();
             }
+            super.getEventsQueue().poll();
         }
         //go through all of the eventListeners that NEED to get triggered
         for(ContinuousEventListener contListener : super.getListenerManager().getContinuousListeners()) {

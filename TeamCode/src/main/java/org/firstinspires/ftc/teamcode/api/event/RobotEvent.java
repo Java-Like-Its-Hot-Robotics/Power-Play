@@ -26,6 +26,7 @@ public enum RobotEvent {
     LiftRaiseToLow,
     LiftRaiseToMedium,
     LiftRaiseToHigh,
+    LiftRaiseToPickup,
     //Manual
     ManualDrop,
     ManualPickup,
