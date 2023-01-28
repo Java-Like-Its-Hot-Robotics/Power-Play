@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.api.controller;
 import static org.firstinspires.ftc.teamcode.api.controller.ControllerKey.*;
 
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Multiset;
 import com.qualcomm.robotcore.exception.RobotCoreException;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
@@ -23,19 +24,17 @@ public class DefaultControllerListener extends AbstractControllerListener {
 
     public void eventStep() {
         try {
-            List<ControllerKey> oldGamepadInputs;
             Gamepad gamepad = super.getGamepad();
-            Multimap<ControllerKey, RobotEvent> bindings = super.getBindings();
+            Multimap<ModifierBinding, RobotEvent> bindings = super.getBindings();
 
-            //Check if any controls have changed to prevent needless events
-            List<ControllerKey> keys = compareGamepad(gamepad);
-            for (ControllerKey key : keys) {
+            //find the pressed keys
+            List<ModifierBinding> keys = getPressedKeys();
+            for (ModifierBinding key : keys) {
                 //find all events associated with the changed keys
                 Collection<RobotEvent> boundEvents = bindings.get(key);
                 for(RobotEvent boundEvent : boundEvents) {
                     super.getMediator().notify(boundEvent);
                 }
-//                oldGamepad.copy(gamepad);
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -31,5 +31,5 @@ public enum RobotEvent {
     ManualDrop,
     ManualPickup,
     ManualOctoServoToggle,
-    ConeGuideLightSensorDetected
+    DebugOctoMotorUp, DebugOctoMotorDown, ConeGuideLightSensorDetected
 }

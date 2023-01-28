@@ -23,7 +23,7 @@ public abstract class DiscreteEventListener implements IRobotEventListener {
         mediator.notify(robotEvent);
     }
 
-    public boolean pauseUntil(double timeout) {
+    public boolean preventRepeatFor(double timeout) {
         if(System.currentTimeMillis() > pressTime + timeout) {
             pressTime = System.currentTimeMillis();
             return true;

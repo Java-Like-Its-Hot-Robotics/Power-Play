@@ -62,6 +62,12 @@ public class OctopusMotor extends DiscreteEventListener {
 //                motor.setTargetPosition(motor.getCurrentPosition());
 //                super.notify(RobotEvent.ManualOctoServoToggle);
                 break;
+            case DebugOctoMotorDown:
+                preventRepeatFor(50);
+                motor.setTargetPosition(motor.getTargetPosition()-5);
+            case DebugOctoMotorUp:
+                preventRepeatFor(50);
+                motor.setTargetPosition(motor.getTargetPosition()+5);
         }
     }
 //    private synchronized void setPos(int pos) {

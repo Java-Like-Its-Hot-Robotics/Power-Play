@@ -35,9 +35,11 @@ public class DemoTeleOp extends LinearOpMode {
                 .bind(RobotEvent.LiftRaiseToLow,        A)
                 .bind(RobotEvent.LiftRaiseToMedium,     B)
                 .bind(RobotEvent.LiftRaiseToHigh,       Y)
-//                .bind(RobotEvent.ManualOctoServoToggle, X);
                 .bind(RobotEvent.LiftRaiseToPickup, DOWN)
-                .bind(RobotEvent.ManualOctoServoToggle, X);
+                .bind(RobotEvent.ManualOctoServoToggle, X)
+                //DEBUG
+                .bind(RobotEvent.DebugOctoMotorDown, LB)
+                .bind(RobotEvent.DebugOctoMotorUp, RB);
         //DRIVE MODE
         MecanumDrive driveMode = new MecanumDrive(gamepad1, robot);
         //SENSORS
@@ -76,6 +78,9 @@ public class DemoTeleOp extends LinearOpMode {
         while(opModeIsActive()) {
             driveMode.drive();
             ed.updateWhileStarted();
+            telemetry.addData("Encoder Pos",String.valueOf(robot.octopusMotor.getCurrentPosition()));
+            telemetry.update();
+
 //            if(gamepad1.a) {
 //                robot.octopusMotor.setTargetPosition(LOW_HEIGHT);
 //            }

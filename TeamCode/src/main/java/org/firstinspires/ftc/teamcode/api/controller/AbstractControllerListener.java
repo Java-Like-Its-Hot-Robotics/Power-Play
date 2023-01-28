@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.teamcode.api.controller.ControllerKey.*;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
+import com.google.common.collect.Multiset;
 import com.qualcomm.robotcore.exception.RobotCoreException;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
@@ -18,21 +19,24 @@ import java.util.List;
 //       Events that are related to keypresses, and the AbstractEventDispatcher determines what
 //       It should send to its subscribers (MEDIATOR PATTERN)
 public abstract class AbstractControllerListener extends ContinuousEventListener {
-    private Multimap<ControllerKey, RobotEvent> bindings;
+    private Multimap<ModifierBinding, RobotEvent> bindings;
     private Gamepad gamepad;
 
     public AbstractControllerListener(Gamepad gamepad) {
-        super("Controller Manager Thread");
+        super("Controller Manager");
         bindings = MultimapBuilder.hashKeys().arrayListValues().build();  //MultimapBuilder.ListMultimapBuilder<KeyEvent, Binding>() {
         this.gamepad = gamepad;
-
-//        super.startDispatch();
     }
     private AbstractControllerListener() {
         super("Controller Manager Thread");
     }
 
     public AbstractControllerListener bind(RobotEvent robotEvent, ControllerKey key) {
+        ModifierBinding modifierKey = new ModifierBinding(key);
+        bindings.put(modifierKey, robotEvent);
+        return this;
+    }
+    public AbstractControllerListener bind(RobotEvent robotEvent, ModifierBinding key) {
         bindings.put(key, robotEvent);
         return this;
     }
@@ -44,29 +48,23 @@ public abstract class AbstractControllerListener extends ContinuousEventListener
     protected Gamepad getGamepad() {
         return gamepad;
     }
-    protected Multimap<ControllerKey, RobotEvent> getBindings() {
+    protected Multimap<ModifierBinding, RobotEvent> getBindings() {
         return bindings;
+    }
+
+    protected List<ModifierBinding> getPressedKeys() {
+        Multiset<ModifierBinding> allKeys = bindings.keys();
+        List<ModifierBinding> pressedList = new ArrayList<>();
+        //collect all pressed keys
+        for(ModifierBinding binding : allKeys) {
+            if (binding.isPressed(gamepad)) {
+                pressedList.add(binding);
+            }
+        }
+        return pressedList;
     }
 
     public int getGamepadId() {
         return gamepad.getGamepadId();
-    }
-
-    protected List<ControllerKey> compareGamepad(Gamepad g1) {
-        List<ControllerKey> keys = new ArrayList<>();
-        if (g1.a) keys.add(A);
-        if (g1.b) keys.add(B);
-        if (g1.x) keys.add(X);
-        if (g1.y) keys.add(Y);
-        if (g1.left_bumper)  keys.add(LB);
-        if (g1.right_bumper) keys.add(RB);
-        if (g1.dpad_up)      keys.add(UP);
-        if (g1.dpad_down)    keys.add(DOWN);
-        if (g1.dpad_left)    keys.add(LEFT);
-        if (g1.dpad_right)   keys.add(RIGHT);
-        if (g1.left_stick_button)  keys.add(LS_IN);
-        if (g1.right_stick_button) keys.add(RS_IN);
-//        keys.add()
-        return keys;
     }
 }

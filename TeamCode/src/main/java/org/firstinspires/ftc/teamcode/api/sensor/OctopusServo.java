@@ -44,7 +44,7 @@ public class OctopusServo extends DiscreteEventListener {
                 super.notify(OctoServoCompressed);
                 break;
             case ManualOctoServoToggle:
-                if(!pauseUntil(TIMEOUT)) break;
+                if(!preventRepeatFor(TIMEOUT)) break;
                 if (isExpanded) {
                     super.notify(ManualDrop);
                 }
@@ -58,11 +58,4 @@ public class OctopusServo extends DiscreteEventListener {
         }
     }
 
-//    private boolean pauseUntil(double timeout) {
-//        if(System.currentTimeMillis() > pressTime + timeout) {
-//            pressTime = System.currentTimeMillis();
-//            return true;
-//        }
-//        return false;
-//    }
 }
