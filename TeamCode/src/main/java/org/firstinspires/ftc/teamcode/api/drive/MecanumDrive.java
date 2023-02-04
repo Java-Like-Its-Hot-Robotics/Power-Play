@@ -16,14 +16,14 @@ public class MecanumDrive extends DriveMode {
     public void drive() {
         Gamepad gamepad = super.getGamepad();
         BotConfig robot = super.getConfig();
-        double straif    =  gamepad.left_stick_y;
-        double forward   = -gamepad.left_stick_x;
-        double turnLeft  = gamepad.left_trigger;
-        double turnRight = gamepad.right_trigger;
+        double straif    =  gamepad.left_stick_y; //0.5
+        double forward   = -gamepad.left_stick_x; //-0,5
+        double turnLeft  = gamepad.left_trigger; //0
+        double turnRight = gamepad.right_trigger; //0
         double turn = turnRight - turnLeft;
         double angleRad = robot.getAngles().firstAngle * -Math.PI/180;
 
-        double temp = straif;
+        double temp = straif; //0.5
         straif = straif*Math.cos(angleRad) - forward*Math.sin(angleRad);
         forward = temp*Math.sin(angleRad) + forward*Math.cos(angleRad);
 
