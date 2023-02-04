@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevTouchSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -113,18 +114,28 @@ public abstract class BotConfig {
         rightBack.setPower(0);
     }
 
-    public void drive(float foward, float strafe, float rotateLeft, float rotateRight){
-        double turn= -rotateLeft+ rotateRight;
-        double denominator= Math.max(Math.abs(strafe)+Math.abs(foward)+Math.abs(turn),1);
-        double frontLeftPower= (strafe+foward+turn)/denominator;
-        double backLeftPower= (strafe-foward+turn)/denominator;
-        double frontRightPower= (strafe-foward-turn)/denominator;
-        double backRightPower= (strafe+foward-turn)/denominator;
+    public void drive(double forwardInp, double strafe, double rotateLeft, double rotateRight){
+        double forward   = -forwardInp;
+        double turnLeft  = rotateLeft;
+        double turnRight = rotateRight;
+        double turn = turnRight - turnLeft;
+        double angleRad = getAngles().firstAngle * -Math.PI/180;
 
-        leftFront.setPower(frontLeftPower);
-        leftBack.setPower(backLeftPower);
-        rightFront.setPower(frontRightPower);
-        rightBack.setPower(backRightPower);
+        double temp = strafe;
+        strafe = strafe*Math.cos(angleRad) - forward*Math.sin(angleRad);
+        forward = temp*Math.sin(angleRad) + forward*Math.cos(angleRad);
+
+        double m1D = (forward-strafe+turn)/3.0;
+        double m2D = (forward+strafe+turn)/3.0;
+        double m3D = (forward+strafe-turn)/3.0;
+        double m4D = (forward-strafe-turn)/3.0;
+
+        // set power for wheels
+        leftFront.setPower(m1D);
+        rightBack.setPower(m4D);
+        leftBack.setPower(m2D);
+        rightFront.setPower(m3D);
+
     }
 
 }
