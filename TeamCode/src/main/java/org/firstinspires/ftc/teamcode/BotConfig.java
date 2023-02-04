@@ -116,26 +116,24 @@ public abstract class BotConfig {
     }
 
     public void drive(double forwardInp, double strafe, double rotateLeft, double rotateRight){
-        double forward   = -forwardInp;
-        double turnLeft  = rotateLeft;
-        double turnRight = rotateRight;
-        double turn = turnRight - turnLeft;
-        double angleRad = getAngles().firstAngle * -Math.PI/180;
+        double y = -forwardInp;
+        double x = strafe * 1.1; // Counteract imperfect strafing
+//        double rx = strafe;
+        double rotate = rotateLeft - rotateRight;
 
-        double temp = strafe;
-        strafe = strafe*Math.cos(angleRad) - forward*Math.sin(angleRad);
-        forward = temp*Math.sin(angleRad) + forward*Math.cos(angleRad);
+        // Denominator is the largest motor power (absolute value) or 1
+        // This ensures all the powers maintain the same ratio, but only when
+        // at least one is out of the range [-1, 1]
+        double dampening = 0.45;                     ;
+        double frontLeftPower = (y + x  + rotate) * dampening;
+        double backLeftPower = (y - x  + rotate) * dampening;
+        double frontRightPower = (y - x - rotate) * dampening;
+        double backRightPower = (y + x - rotate) * dampening;
 
-        double m1D = (forward-strafe+turn)/3.0;
-        double m2D = (forward+strafe+turn)/3.0;
-        double m3D = (forward+strafe-turn)/3.0;
-        double m4D = (forward-strafe-turn)/3.0;
-
-        // set power for wheels
-        leftFront.setPower(m1D);
-        rightBack.setPower(m4D);
-        leftBack.setPower(m2D);
-        rightFront.setPower(m3D);
+        leftFront.setPower(frontLeftPower);
+        leftBack.setPower(backLeftPower);
+        rightFront.setPower(frontRightPower);
+        rightBack.setPower(backRightPower);
 
     }
 
