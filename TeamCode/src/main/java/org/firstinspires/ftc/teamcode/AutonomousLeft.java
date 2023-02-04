@@ -17,7 +17,7 @@ public class AutonomousLeft extends LinearOpMode {
 
         while (opModeIsActive()) {
             // Move right when robot is started
-            robot.drive(0, -1, 0, 0);
+            robot.drive(-1, 0, 0, 0);
             // Stop 1 strafe left from starting point
             sleep(5000);
             robot.stopDrive();
