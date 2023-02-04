@@ -103,8 +103,8 @@ public abstract class BotConfig {
      * @return the Orientation with INTRINSIC, ZYX, and DEGREES units
      */
     public Orientation getAngles() {
-        return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-//        return new Orientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES, 100, 100, 1,1);
+//        return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        return new Orientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES, 100, 100, 1,1);
     }
 
     public void stopDrive(){
@@ -113,6 +113,7 @@ public abstract class BotConfig {
         rightFront.setPower(0);
         rightBack.setPower(0);
     }
+
 
 
 }

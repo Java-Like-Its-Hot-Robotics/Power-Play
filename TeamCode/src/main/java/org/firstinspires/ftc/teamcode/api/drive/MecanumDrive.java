@@ -16,36 +16,23 @@ public class MecanumDrive extends DriveMode {
     public void drive() {
         Gamepad gamepad = super.getGamepad();
         BotConfig robot = super.getConfig();
-        double straif    =  gamepad.left_stick_y; //0.5
-        double forward   = -gamepad.left_stick_x; //-0,5
-        double turnLeft  = gamepad.left_trigger; //0
-        double turnRight = gamepad.right_trigger; //0
-        double turn = turnRight - turnLeft;
-        double angleRad = robot.getAngles().firstAngle * -Math.PI/180;
+        double y = -gamepad.left_stick_y; // Remember, this is reversed!
+        double x = gamepad.left_stick_x * 1.1; // Counteract imperfect strafing
+        double rx = gamepad.right_stick_x;
 
-        double temp = straif; //0.5
-        straif = straif*Math.cos(angleRad) - forward*Math.sin(angleRad);
-        forward = temp*Math.sin(angleRad) + forward*Math.cos(angleRad);
+        // Denominator is the largest motor power (absolute value) or 1
+        // This ensures all the powers maintain the same ratio, but only when
+        // at least one is out of the range [-1, 1]
+        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+        double frontLeftPower = (y + x + rx) / denominator;
+        double backLeftPower = (y - x + rx) / denominator;
+        double frontRightPower = (y - x - rx) / denominator;
+        double backRightPower = (y + x - rx) / denominator;
 
-        if (Math.abs(straif) <= TOLERANCE) {
-            straif = 0;
-        }
-        if (Math.abs(forward) <= TOLERANCE) {
-            forward = 0;
-        }
-
-        double m1D = (forward-straif+turn)/3.0;
-        double m2D = (forward+straif+turn)/3.0;
-        double m3D = (forward+straif-turn)/3.0;
-        double m4D = (forward-straif-turn)/3.0;
-
-
-        // set power for wheels
-        robot.leftFront.setPower(m1D);
-        robot.rightBack.setPower(m4D);
-        robot.leftBack.setPower(m2D);
-        robot.rightFront.setPower(m3D);
-
+        robot.leftFront.setPower(frontLeftPower);
+        robot.leftBack.setPower(backLeftPower);
+        robot.rightFront.setPower(frontRightPower);
+        robot.rightBack.setPower(backRightPower);
     }
 
     @Override
