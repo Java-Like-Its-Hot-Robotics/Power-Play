@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.api.event.mediator.IRobotEventMediator;
 
 public abstract class DiscreteEventListener implements IRobotEventListener {
     private IRobotEventMediator mediator;
+    private double pressTime = 0;
 
     public DiscreteEventListener() {}
 
@@ -20,5 +21,13 @@ public abstract class DiscreteEventListener implements IRobotEventListener {
 
     public void notify(RobotEvent robotEvent) {
         mediator.notify(robotEvent);
+    }
+
+    public boolean preventRepeatFor(double timeout) {
+        if(System.currentTimeMillis() > pressTime + timeout) {
+            pressTime = System.currentTimeMillis();
+            return true;
+        }
+        return false;
     }
 }

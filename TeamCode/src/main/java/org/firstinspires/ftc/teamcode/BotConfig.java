@@ -80,7 +80,7 @@ public abstract class BotConfig {
         octopusMotor.setTargetPosition(0);
         octopusMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         octopusMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION); //RUN TO POSITION will mess everything up!
-        octopusMotor.setPower(0.5);
+        octopusMotor.setPower(0.6);
         octopusMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         ////Servo
         octopusServo = hwMap.get(Servo.class, "octopusServo");
@@ -104,7 +104,8 @@ public abstract class BotConfig {
      * @return the Orientation with INTRINSIC, ZYX, and DEGREES units
      */
     public Orientation getAngles() {
-        return new Orientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES, 100, 100, 1,1);//imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+//        return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        return new Orientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES, 100, 100, 1,1);
     }
 
     public void stopDrive(){
@@ -137,5 +138,6 @@ public abstract class BotConfig {
         rightFront.setPower(m3D);
 
     }
+
 
 }

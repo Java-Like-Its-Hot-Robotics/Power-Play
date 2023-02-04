@@ -26,9 +26,10 @@ public enum RobotEvent {
     LiftRaiseToLow,
     LiftRaiseToMedium,
     LiftRaiseToHigh,
+    LiftRaiseToPickup,
     //Manual
     ManualDrop,
     ManualPickup,
     ManualOctoServoToggle,
-    ConeGuideLightSensorDetected
+    DebugOctoMotorUp, DebugOctoMotorDown, ConeGuideLightSensorDetected
 }
