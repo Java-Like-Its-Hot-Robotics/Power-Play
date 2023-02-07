@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.api.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.api.event.RobotEvent;
 import org.firstinspires.ftc.teamcode.api.event.dispatcher.AbstractEventDispatcher;
 import org.firstinspires.ftc.teamcode.api.event.dispatcher.EventDispatcherFactory;
+import org.firstinspires.ftc.teamcode.api.sensor.OctopusDualMotor;
 import org.firstinspires.ftc.teamcode.api.sensor.OctopusMotor;
 import org.firstinspires.ftc.teamcode.api.sensor.OctopusServo;
 import org.firstinspires.ftc.teamcode.api.sensor.TouchSensor;
@@ -32,9 +33,9 @@ public class DemoTeleOp extends LinearOpMode {
 
         //CONTROLLER
         AbstractControllerListener controllerListener = new DefaultControllerListener(gamepad1)
-                .bind(RobotEvent.LiftRaiseToLow,        A)
-                .bind(RobotEvent.LiftRaiseToMedium,     B)
-                .bind(RobotEvent.LiftRaiseToHigh,       Y)
+//                .bind(RobotEvent.LiftRaiseToLow,        A)
+//                .bind(RobotEvent.LiftRaiseToMedium,     B)
+//                .bind(RobotEvent.LiftRaiseToHigh,       Y)
                 .bind(RobotEvent.LiftRaiseToPickup, DOWN)
                 .bind(RobotEvent.ManualOctoServoToggle, X)
                 //DEBUG
@@ -48,7 +49,7 @@ public class DemoTeleOp extends LinearOpMode {
         ////Octopus Servo
         OctopusServo octopusServo = new OctopusServo(robot.octopusServo);
         ////Octopus Motor
-        OctopusMotor octopusMotor = new OctopusMotor(robot.octopusMotor);
+        OctopusDualMotor octopusMotor = new OctopusDualMotor(robot.octopusMotor, robot.octopusMotor2);
 
         //DISPATCHER
         AbstractEventDispatcher ed = new EventDispatcherFactory()

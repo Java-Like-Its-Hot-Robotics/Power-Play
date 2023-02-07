@@ -26,6 +26,7 @@ public abstract class BotConfig {
     public DcMotor rightFront = null;
     public DcMotor rightBack = null;
     public DcMotor octopusMotor = null;
+    public DcMotor octopusMotor2 = null;
     public Servo octopusServo = null;
     public BNO055IMU imu = null;
     public RevTouchSensor octoTouchSensor = null;
@@ -75,6 +76,7 @@ public abstract class BotConfig {
         //OCTOPUS SETUP
         ////Motors
         octopusMotor = hwMap.get(DcMotor.class, "octopusMotor");
+        octopusMotor2 = hwMap.get(DcMotor.class, "octopusMotor2");
 //        octopusMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         octopusMotor.setTargetPosition(0);
         octopusMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

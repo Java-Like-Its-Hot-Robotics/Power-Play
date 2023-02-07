@@ -43,6 +43,7 @@ public class MecanumDrive extends DriveMode {
             case OpmodeStart:
                 drive();
                 break;
+                //todo: change speeds here (move denominator to final var)
             default: break;
         }
     }
