@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevTouchSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -116,6 +117,27 @@ public abstract class BotConfig {
         rightBack.setPower(0);
     }
 
+    public void drive(double forwardInp, double strafe, double rotateLeft, double rotateRight){
+        double y = -forwardInp;
+        double x = strafe * 1.1; // Counteract imperfect strafing
+//        double rx = strafe;
+        double rotate = rotateLeft - rotateRight;
+
+        // Denominator is the largest motor power (absolute value) or 1
+        // This ensures all the powers maintain the same ratio, but only when
+        // at least one is out of the range [-1, 1]
+        double dampening = 0.45;                     ;
+        double frontLeftPower = (y + x  + rotate) * dampening;
+        double backLeftPower = (y - x  + rotate) * dampening;
+        double frontRightPower = (y - x - rotate) * dampening;
+        double backRightPower = (y + x - rotate) * dampening;
+
+        leftFront.setPower(frontLeftPower);
+        leftBack.setPower(backLeftPower);
+        rightFront.setPower(frontRightPower);
+        rightBack.setPower(backRightPower);
+
+    }
 
 
 }
