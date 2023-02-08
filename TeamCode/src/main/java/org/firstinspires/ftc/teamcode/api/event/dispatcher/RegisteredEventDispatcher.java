@@ -15,20 +15,15 @@ public class RegisteredEventDispatcher extends AbstractEventDispatcher {
 
     @Override
     protected void dispatchLoop() {
-//        try {
-//            while(!super.getDispatchThread().isInterrupted()) {
-                final RobotEvent event = super.getEventsQueue().remove();
-                for(IRobotEventListener listenerI : super.getListenerManager().getEventListeners(event)) {
-                    dispatch(listenerI, event);
-                }
-                //someone asked to stop this thread
-                //set back the interrupt flag ad
-                //quit the loop
-//                Thread.currentThread().interrupt();
-//            }
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+        final RobotEvent event = super.getEventsQueue().remove();
+        for(IRobotEventListener listenerI : super.getListenerManager().getEventListeners(event)) {
+            dispatch(listenerI, event);
+        }
+    }
+
+    @Override
+    protected void handleConditional() {
+
     }
 
     @Override

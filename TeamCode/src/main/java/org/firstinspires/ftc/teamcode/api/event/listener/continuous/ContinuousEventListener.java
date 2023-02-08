@@ -4,6 +4,7 @@ import org.firstinspires.ftc.teamcode.api.event.RobotEvent;
 import org.firstinspires.ftc.teamcode.api.event.listener.IRobotEventListener;
 import org.firstinspires.ftc.teamcode.api.event.mediator.IRobotEventMediator;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Semaphore;
 
@@ -42,4 +43,8 @@ public abstract class ContinuousEventListener implements IRobotEventListener {
         mediator.notify(robotEvent);
     }
 
+    @Override
+    public void notifyWhen(RobotEvent robotEvent, Callable<Boolean> condition) {
+        mediator.notifyWhen(robotEvent, condition);
+    }
 }

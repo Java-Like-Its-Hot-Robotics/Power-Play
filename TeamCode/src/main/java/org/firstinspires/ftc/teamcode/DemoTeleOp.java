@@ -33,9 +33,9 @@ public class DemoTeleOp extends LinearOpMode {
 
         //CONTROLLER
         AbstractControllerListener controllerListener = new DefaultControllerListener(gamepad1)
-//                .bind(RobotEvent.LiftRaiseToLow,        A)
-//                .bind(RobotEvent.LiftRaiseToMedium,     B)
-//                .bind(RobotEvent.LiftRaiseToHigh,       Y)
+                .bind(RobotEvent.LiftRaiseToLow,        A)
+                .bind(RobotEvent.LiftRaiseToMedium,     B)
+                .bind(RobotEvent.LiftRaiseToHigh,       Y)
                 .bind(RobotEvent.LiftRaiseToPickup, DOWN)
                 .bind(RobotEvent.ManualOctoServoToggle, X)
                 //DEBUG

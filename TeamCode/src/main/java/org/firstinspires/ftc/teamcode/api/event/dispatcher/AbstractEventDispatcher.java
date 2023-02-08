@@ -9,40 +9,36 @@ import org.firstinspires.ftc.teamcode.api.event.listener.AbstractEventListenerMa
 
 import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Anything meant to manage events and their dispatch should extend this class.
+ */
 public abstract class AbstractEventDispatcher implements IRobotEventMediator {
 
-    //TODO Move binding management to AbstractEventListenerManager
     private AbstractEventListenerManager listenerManager;
-    //TODO: Ensure the nullary constructor puts an initial heartbeat ping to give each Listener its
-    //      instance variable
     private Queue<RobotEvent> eventsQueue;
-//    private Thread dispatchThread;
-//    private ExecutorService dispatchPool = Executors.newFixedThreadPool(2);
+    private IConditionalManager conditionalManager = new ReplaceConditionalHolder();
 
     private AbstractEventDispatcher() {}
 
     public AbstractEventDispatcher(AbstractEventListenerManager listenerManager, BlockingQueue<RobotEvent> eventsQueue) {
         this.listenerManager = listenerManager;
         this.eventsQueue = eventsQueue;
-//        this.dispatchThread = new Thread
-//                (this::dispatchLoop
-//                , "Event Dispatch Loop");
-//        dispatchThread.setDaemon(true);
-//        dispatchThread.setPriority(9);
-//        dispatchThread.start();
     }
 
     /**  Raises an event to dispatch
      */
     public void notify(@NonNull RobotEvent robotEvent) {
         eventsQueue.add(robotEvent);
-//        try {
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+    }
+
+    @Override
+    public void notifyWhen(RobotEvent robotEvent, Callable<Boolean> condition) {
+        //TODO: make this more abstract and replaceable
+        conditionalManager = new ReplaceConditionalHolder(condition, robotEvent);
     }
 
     protected void dispatch(IRobotEventListener eventListenerI, RobotEvent robotEvent) {
@@ -74,10 +70,10 @@ public abstract class AbstractEventDispatcher implements IRobotEventMediator {
     protected Queue<RobotEvent> getEventsQueue() {
         return eventsQueue;
     }
+    protected IConditionalManager getConditionalManager() {
+        return conditionalManager;
+    }
 
-//    protected Thread getDispatchThread() {
-//        return dispatchThread;
-//    }
 
     /**
      * Send an init event. Useful for OpModes.
@@ -88,9 +84,14 @@ public abstract class AbstractEventDispatcher implements IRobotEventMediator {
     public abstract void updateWhileStarted();
 
     public abstract void stop();
-//    public void kill() {
-//        dispatchThread = null;
-//        dispatchPool.shutdown();
-//    }
+
+    /**
+     * This is what will run during the opmode. It should handle events.
+     */
     protected abstract void dispatchLoop();
+
+    /**
+     * Conditionals should be checked and executed upon invocation.
+     */
+    protected abstract void handleConditional();
 }

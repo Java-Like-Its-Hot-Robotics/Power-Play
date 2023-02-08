@@ -9,10 +9,10 @@ import org.firstinspires.ftc.teamcode.api.event.listener.discrete.DiscreteEventL
 public class OctopusDualMotor extends DiscreteEventListener {
     private final DcMotor motorL;
     private final DcMotor motorR;
-    private final int CARRY_POS = 150;
-    private final int PICKUP_POS = 0;
-    private final int LOW_HEIGHT = 390;
-    private final int MED_HEIGHT = 750;
+    private final int PICKUP_POS  = 0;
+    private final int CARRY_POS   = 150;
+    private final int LOW_HEIGHT  = 375;
+    private final int MED_HEIGHT  = 750;
     private final int HIGH_HEIGHT = 850;
 
     public OctopusDualMotor(DcMotor motorL, DcMotor motorR) {
@@ -34,44 +34,25 @@ public class OctopusDualMotor extends DiscreteEventListener {
     @Override
     public void handleEvent(RobotEvent robotEvent) {
         switch(robotEvent) {
-            //do not listen for touch, the servo does that and will notify us
-            case LiftRaiseToCarry:
-                if(motorL.isBusy()) break;
-                motorL.setTargetPosition(CARRY_POS);
-                motorR.setTargetPosition(CARRY_POS);
-//                super.notify(RobotEvent.LiftReachedCarry);
-                break;
             case ConeGuideLightSensorDetected:
-//                if(motor.isBusy()) break;
                 motorL.setTargetPosition(PICKUP_POS);
                 motorR.setTargetPosition(PICKUP_POS);
-//                super.notify(RobotEvent.LiftReachedPickup);
+                break;
+            case LiftRaiseToCarry:
+                setMotorsToCallback(CARRY_POS, RobotEvent.LiftReachedCarry);
                 break;
             case LiftRaiseToLow:
-//                if(motor.isBusy()) break;
-                motorL.setTargetPosition(LOW_HEIGHT);
-                motorR.setTargetPosition(LOW_HEIGHT);
-
-                super.notify(RobotEvent.LiftReachedLow);
+                setMotorsToCallback(LOW_HEIGHT, RobotEvent.LiftReachedLow);
                 break;
             case LiftRaiseToMedium:
-//                if(motor.isBusy()) break;
-                motorL.setTargetPosition(MED_HEIGHT);
-                motorR.setTargetPosition(MED_HEIGHT);
-
-                super.notify(RobotEvent.LiftReachedMedium);
+                setMotorsToCallback(MED_HEIGHT, RobotEvent.LiftReachedMedium);
                 break;
             case LiftRaiseToHigh:
-//                if(motor.isBusy()) break;
-                motorL.setTargetPosition(HIGH_HEIGHT);
-                motorR.setTargetPosition(HIGH_HEIGHT);
-
-                super.notify(RobotEvent.LiftReachedHigh);
+                setMotorsToCallback(HIGH_HEIGHT, RobotEvent.LiftReachedHigh);
                 break;
             case LiftRaiseToPickup:
-//                if(motor.isBusy()) break;
-                motorL.setTargetPosition(0);
-                motorR.setTargetPosition(0);
+                setMotorsToCallback(0, RobotEvent.LiftReachedPickup);
+                break;
             case OctoTouchSensorPressed:
                 //stop the motor where it is
 //                motor.setTargetPosition(motor.getCurrentPosition());
@@ -81,11 +62,28 @@ public class OctopusDualMotor extends DiscreteEventListener {
                 preventRepeatFor(50);
                 motorL.setTargetPosition(motorL.getTargetPosition()-5);
                 motorR.setTargetPosition(motorL.getTargetPosition()-5);
+                break;
             case DebugOctoMotorUp:
                 preventRepeatFor(50);
                 motorL.setTargetPosition(motorL.getTargetPosition()+5);
                 motorR.setTargetPosition(motorL.getTargetPosition()+5);
+                break;
         }
+    }
+
+    private boolean motorsAt(int pos) {
+        return motorL.getCurrentPosition() == pos
+                && motorR.getCurrentPosition() == pos;
+    }
+
+    private void setMotorsTo(int pos) {
+        motorL.setTargetPosition(pos);
+        motorR.setTargetPosition(pos);
+    }
+
+    private void setMotorsToCallback(int pos, RobotEvent robotEvent) {
+        setMotorsTo(pos);
+        super.notifyWhen(robotEvent, () -> motorsAt(pos));
     }
 //    private synchronized void setPos(int pos) {
 //        //keep track between motor resets

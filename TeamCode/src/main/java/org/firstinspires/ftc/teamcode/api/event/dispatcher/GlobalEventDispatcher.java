@@ -19,7 +19,9 @@ public class GlobalEventDispatcher extends AbstractEventDispatcher {
 
     @Override
     protected void dispatchLoop() {
-//        final RobotEvent event = super.getEventsQueue().remove();
+        //make sure conditional(s) are checked
+        handleConditional();
+        //find any events that fired
         for (RobotEvent event : super.getEventsQueue()) {
             for (IRobotEventListener listenerI : super.getListenerManager().getEventListeners()) {
                 dispatch(listenerI, event);
@@ -30,6 +32,11 @@ public class GlobalEventDispatcher extends AbstractEventDispatcher {
         for(ContinuousEventListener contListener : super.getListenerManager().getContinuousListeners()) {
             contListener.eventStep();
         }
+    }
+
+    @Override
+    protected void handleConditional() {
+        super.getConditionalManager().check();
     }
 
     @Override
