@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode.api.event;
 //this could be refactored into more classes with visitor pattern,
 //but that is a lot of work and is terribly ugly
 public enum RobotEvent {
-    //FIXME make an enum of events to manage (like ControllerKey, but
-    //      for stuff like LiftReachedTop)
     NullEvent,
     //Opmode
     OpmodeInit,
@@ -14,6 +12,7 @@ public enum RobotEvent {
     OctoTouchSensorPressed,
     OctoServoExpanded,
     OctoServoCompressed,
+    ////////////////////////////////////
     //Lift
     ////Statuses
     LiftReachedPickup,
@@ -21,15 +20,25 @@ public enum RobotEvent {
     LiftReachedLow,
     LiftReachedMedium,
     LiftReachedHigh,
+    LiftReachedPrevLevel,
+    LiftReachedNextLevel,
     ////Commands
+    LiftRaiseToPickup,
     LiftRaiseToCarry,
     LiftRaiseToLow,
     LiftRaiseToMedium,
     LiftRaiseToHigh,
-    LiftRaiseToPickup,
+    /////Level Agnostic
+    LiftGoStageUp,
+    LiftGoStageDown,
+    /////////////////////////////////////
     //Manual
     ManualDrop,
     ManualPickup,
     ManualOctoServoToggle,
-    DebugOctoMotorUp, DebugOctoMotorDown, ConeGuideLightSensorDetected
+    //Debug
+    DebugOctoMotorUp,
+    DebugOctoMotorDown,
+    //misc or unused
+    ConeGuideLightSensorDetected
 }

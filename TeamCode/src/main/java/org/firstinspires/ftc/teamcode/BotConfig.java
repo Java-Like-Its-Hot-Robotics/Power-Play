@@ -126,7 +126,7 @@ public abstract class BotConfig {
         // Denominator is the largest motor power (absolute value) or 1
         // This ensures all the powers maintain the same ratio, but only when
         // at least one is out of the range [-1, 1]
-        double dampening = 0.45;                     ;
+        double dampening = 0.45;
         double frontLeftPower  = (y + x + rotate) * dampening;
         double backLeftPower   = (y - x + rotate) * dampening;
         double frontRightPower = (y - x - rotate) * dampening;

@@ -9,6 +9,7 @@ public interface IRobotEventListener {
     void handleEvent(RobotEvent robotEvent);
     void initHandshake(IRobotEventMediator mediator);
 
+    //TODO: move this into its own interface
     void notify(RobotEvent robotEvent);
     void notifyWhen(RobotEvent robotEvent, Callable<Boolean> condition);
 }
