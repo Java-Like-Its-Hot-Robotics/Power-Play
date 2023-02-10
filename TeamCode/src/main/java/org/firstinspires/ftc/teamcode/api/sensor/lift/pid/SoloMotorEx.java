@@ -1,18 +1,22 @@
-package org.firstinspires.ftc.teamcode.api.sensor.lift;
+package org.firstinspires.ftc.teamcode.api.sensor.lift.pid;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.api.sensor.IPositionable;
 
-public class SoloMotor implements IPositionable<Integer> {
-    private DcMotor motor;
+public class SoloMotorEx implements IPositionable<Integer> {
+    DcMotorEx motor;
 
-    public SoloMotor(DcMotor motor) {
+    public SoloMotorEx(DcMotorEx motor) {
         this.motor = motor;
 
-        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motor.setTargetPosition(0);
-        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+
+        motor.setVelocity(1000);
+        motor.setPower(0.8);
+
+        motor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
     }
 
     @Override
@@ -27,7 +31,7 @@ public class SoloMotor implements IPositionable<Integer> {
 
     @Override
     public void setVelocity(double velocity) {
-
+        motor.setVelocity(velocity);
     }
 
     @Override

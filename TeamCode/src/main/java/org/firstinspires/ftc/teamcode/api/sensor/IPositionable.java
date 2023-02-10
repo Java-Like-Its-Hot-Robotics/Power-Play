@@ -8,6 +8,7 @@ package org.firstinspires.ftc.teamcode.api.sensor;
 public interface IPositionable<T> {
     T getPosition();
     void setPosition(T position);
+    void setVelocity(double velocity);
     boolean isAt(T position);
 
     T getTargetPosition();

@@ -18,6 +18,9 @@ public class DualMotors implements IPositionable<Integer> {
         motorL.setTargetPosition(0);
         motorR.setTargetPosition(0);
 
+        motorL.setPower(0.8);
+        motorR.setPower(0.8);
+
         motorL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
@@ -34,6 +37,12 @@ public class DualMotors implements IPositionable<Integer> {
         motorL.setTargetPosition(position);
         motorR.setTargetPosition(position);
     }
+
+    /**
+     * WARNING: NO-OP
+     */
+    @Override
+    public void setVelocity(double velocity) {}
 
     @Override
     public boolean isAt(Integer position) {

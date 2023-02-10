@@ -75,23 +75,25 @@ public class OctopusMotor extends DiscreteEventListener {
                 super.notify(RobotEvent.ManualOctoServoToggle);
                 break;
             case LiftGoStageUp:
+                if (!preventRepeatFor(100)) break;
                 setMotorsToCallback(
                         levelTracker.nextLevel(),
                         RobotEvent.LiftReachedNextLevel
                 );
                 break;
             case LiftGoStageDown:
+                if (!preventRepeatFor(100)) break;
                 setMotorsToCallback(
                         levelTracker.prevLevel(),
                         RobotEvent.LiftReachedPrevLevel
                 );
                 break;
             case DebugOctoMotorDown:
-                if (!preventRepeatFor(50)) break;
+                if (!preventRepeatFor(250)) break;
                 motors.setPosition(motors.getPosition()-5);
                 break;
             case DebugOctoMotorUp:
-                if (!preventRepeatFor(50)) break;
+                if (!preventRepeatFor(250)) break;
                 motors.setPosition(motors.getPosition()+5);
                 break;
         }

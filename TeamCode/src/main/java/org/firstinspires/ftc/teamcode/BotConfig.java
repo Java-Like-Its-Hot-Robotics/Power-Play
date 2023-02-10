@@ -3,8 +3,12 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevTouchSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.MotorControlAlgorithm;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -26,8 +30,8 @@ public abstract class BotConfig {
     public DcMotor leftBack = null;
     public DcMotor rightFront = null;
     public DcMotor rightBack = null;
-    public DcMotor octopusMotor = null;
-    public DcMotor octopusMotor2 = null;
+    public DcMotorEx octopusMotor = null;
+    public DcMotorEx octopusMotor2 = null;
     public Servo octopusServo = null;
     public BNO055IMU imu = null;
     public RevTouchSensor octoTouchSensor = null;
@@ -64,6 +68,7 @@ public abstract class BotConfig {
         // Save reference to Hardware map
         hwMap = ahwMap;
 
+
         //MOTOR SETUP
         leftFront  = hwMap.get(DcMotor.class, "FrontLeft");
         leftBack   = hwMap.get(DcMotor.class, "BackLeft");
@@ -76,14 +81,28 @@ public abstract class BotConfig {
         rightBack.setDirection (DcMotor.Direction.REVERSE);
         //OCTOPUS SETUP
         ////Motors
-        octopusMotor = hwMap.get(DcMotor.class, "octopusMotor");
-        octopusMotor2 = hwMap.get(DcMotor.class, "octopusMotor2");
-//        octopusMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        octopusMotor.setTargetPosition(0);
-        octopusMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        octopusMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION); //RUN TO POSITION will mess everything up!
-        octopusMotor.setPower(0.6);
+        octopusMotor = hwMap.get(DcMotorEx.class, "octopusMotor");
+        octopusMotor2 = hwMap.get(DcMotorEx.class, "octopusMotor2");
+        //default PID coefficients are p=10, i=0.050003, d=0, f=0
+        PIDFCoefficients velCoefficients = new PIDFCoefficients(
+                10,
+                3,
+                2,
+                75, //feed forward
+                MotorControlAlgorithm.PIDF
+        );
+        PIDFCoefficients posCoefficients = new PIDFCoefficients(
+                10, 0, 0, 0, MotorControlAlgorithm.PIDF
+        );
+//        octopusMotor.setVelocityPIDFCoefficients(10, 0, 0, 50);
+//        octopusMotor2.setVelocityPIDFCoefficients(10, 0, 0, 50);
+        octopusMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, velCoefficients);
+        octopusMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, posCoefficients);
+        octopusMotor2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, velCoefficients);
+        octopusMotor2.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, posCoefficients);
+
         octopusMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        octopusMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         ////Servo
         octopusServo = hwMap.get(Servo.class, "octopusServo");
         ////Sensors
