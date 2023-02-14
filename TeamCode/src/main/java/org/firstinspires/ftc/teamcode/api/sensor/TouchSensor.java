@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.api.event.listener.continuous.ContinuousEv
 
 
 public class TouchSensor extends ContinuousEventListener {
-    private RevTouchSensor touchSensor;
+    private final RevTouchSensor touchSensor;
     private boolean isHeld = false;
 
     public TouchSensor(RevTouchSensor touchSensor) {
@@ -16,25 +16,30 @@ public class TouchSensor extends ContinuousEventListener {
     }
 
     @Override
-    public void handleEvent(RobotEvent robotEvent) {}
+    public void handleEvent(RobotEvent robotEvent) {
+        switch(robotEvent) {
+            case LiftReachedPickup:
+                isHeld = false;
+                break;
+            default:
+                break;
+        }
+    }
 
     @Override
     public void eventStep() {
         //We don't want to keep sending the status when it is held
         //TODO: can this be generalized so that its easier to make these
         //      latching classes?
-//        if(touchSensor.isPressed() || touchSensor.getValue() == 1) {
-//
-//            super.notify(RobotEvent.ManualPickup);
-//        }
-//        if(!isHeld && touchSensor.isPressed()) {
-//            //TODO: generalize so that the event raised is generalized to the instance
-//            //      rather than the whole class
-//            super.notify(RobotEvent.OctoTouchSensorPressed);
-//            isHeld = true;
-//        } else if (isHeld && !touchSensor.isPressed()){
-//            //reset the held status
-//            isHeld = false;
-//        }
+        if(!isHeld && touchSensor.isPressed()) {
+            //TODO: generalize so that the event raised is generalized to the instance
+            //      rather than the whole class
+            super.notify(RobotEvent.OctoTouchSensorPressed);
+            isHeld = true;
+        }
+    }
+
+    public boolean isHeld() {
+        return isHeld;
     }
 }

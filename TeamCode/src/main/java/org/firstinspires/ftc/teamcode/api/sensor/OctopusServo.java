@@ -51,8 +51,13 @@ public class OctopusServo extends DiscreteEventListener {
                 else {
                     super.notify(ManualPickup);
                 }
+                break;
             case OctoTouchSensorPressed:
-                super.notify(ManualOctoServoToggle);
+                //the touch sensor event has fired
+                //pickup what we are holding
+                super.notify(ManualPickup);
+                //go up to pickup
+                super.notify(LiftGoStageUp);
 
             default: break;
         }

@@ -9,7 +9,7 @@ public class OctopusLevelManager implements ILevelTracker {
         PICKUP_POS (0),
         CARRY_POS  (150),
         LOW_HEIGHT (375),
-        MED_HEIGHT (750),
+        MED_HEIGHT (595),
         HIGH_HEIGHT(850);
 
         private final int height;

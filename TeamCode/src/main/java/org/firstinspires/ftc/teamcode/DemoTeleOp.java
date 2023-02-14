@@ -64,7 +64,7 @@ public class DemoTeleOp extends LinearOpMode {
                 .build()
                 .register(controllerListener)
                 .register(driveMode)
-//                .register(touchSensor)
+                .register(touchSensor)
                 .register(octopusServo)
                 .register(octopusMotor);
 
@@ -90,8 +90,12 @@ public class DemoTeleOp extends LinearOpMode {
             telemetry.addData("PID Vel M2", robot.octopusMotor2.getVelocity());
 
             //PID TESTING
+            telemetry.addData("Touch Sensor Held", touchSensor.isHeld());
             telemetry.update();
 
+            if (touchSensor.isHeld()) {
+                gamepad1.rumble(50);
+            }
 
 
         }

@@ -94,15 +94,19 @@ public abstract class BotConfig {
         PIDFCoefficients posCoefficients = new PIDFCoefficients(
                 10, 0, 0, 0, MotorControlAlgorithm.PIDF
         );
-//        octopusMotor.setVelocityPIDFCoefficients(10, 0, 0, 50);
-//        octopusMotor2.setVelocityPIDFCoefficients(10, 0, 0, 50);
         octopusMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, velCoefficients);
         octopusMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, posCoefficients);
         octopusMotor2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, velCoefficients);
         octopusMotor2.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, posCoefficients);
 
+        //what happens when they dont have a power set
         octopusMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         octopusMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
+        //prevent fighting
+        octopusMotor.setTargetPositionTolerance(10);
+        octopusMotor2.setTargetPositionTolerance(10);
+
         ////Servo
         octopusServo = hwMap.get(Servo.class, "octopusServo");
         ////Sensors

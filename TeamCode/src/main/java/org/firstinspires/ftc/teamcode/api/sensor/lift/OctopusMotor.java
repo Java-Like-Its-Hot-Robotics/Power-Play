@@ -70,19 +70,15 @@ public class OctopusMotor extends DiscreteEventListener {
                         RobotEvent.LiftReachedPickup
                 );
                 break;
-            case OctoTouchSensorPressed:
-                //stop the motor where it is
-                super.notify(RobotEvent.ManualOctoServoToggle);
-                break;
             case LiftGoStageUp:
-                if (!preventRepeatFor(100)) break;
+                if (!preventRepeatFor(500)) break;
                 setMotorsToCallback(
                         levelTracker.nextLevel(),
                         RobotEvent.LiftReachedNextLevel
                 );
                 break;
             case LiftGoStageDown:
-                if (!preventRepeatFor(100)) break;
+                if (!preventRepeatFor(500)) break;
                 setMotorsToCallback(
                         levelTracker.prevLevel(),
                         RobotEvent.LiftReachedPrevLevel

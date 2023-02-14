@@ -48,6 +48,7 @@ public class DualMotors implements IPositionable<Integer> {
     public boolean isAt(Integer position) {
         return motorL.getCurrentPosition() == position
                 && motorR.getCurrentPosition() == position;
+        //TODO: Add Tolerance
     }
 
     @Override
