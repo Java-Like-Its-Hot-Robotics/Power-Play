@@ -2,11 +2,18 @@ package org.firstinspires.ftc.teamcode;
 
 import static org.firstinspires.ftc.teamcode.api.controller.ControllerKey.*;
 
+import android.content.res.AssetManager;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.teamcode.api.controller.AbstractControllerListener;
 import org.firstinspires.ftc.teamcode.api.controller.DefaultControllerListener;
 import org.firstinspires.ftc.teamcode.api.drive.MecanumDrive;
@@ -22,16 +29,36 @@ import org.firstinspires.ftc.teamcode.api.sensor.lift.pid.DualMotorEx;
 import org.firstinspires.ftc.teamcode.api.sensor.lift.pid.MotorPID;
 import org.firstinspires.ftc.teamcode.api.sensor.lift.pid.SoloMotorEx;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+
 @TeleOp(name = "Main TeleOp")
 public class DemoTeleOp extends LinearOpMode {
 
 //    private final ElapsedTime runtime = new ElapsedTime();
 
     BotConfig robot = new DefaultBotConfig();
+//VUFORIA STUFF////////
+    private static final String TFOD_MODEL_FILE = "all_stages.tflite";
+    private static final String[] LABELS = {
+            "low_level",
+            "medium_level",
+            "high_level"
+    };
+
+    private VuforiaLocalizer vuforia;
+    private TFObjectDetector tfod;
 
 
     @Override
     public void runOpMode() {
+        initVuforia();
+        initTfod();
+        tfod.activate();
 
         robot.init(hardwareMap);
 
@@ -78,6 +105,13 @@ public class DemoTeleOp extends LinearOpMode {
             //these must be run every frame
             driveMode.drive();
             ed.updateWhileStarted();
+            //tensorflow
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+            telemetry.addData("# Objects Detected", updatedRecognitions.size());
+            for(Recognition recognition : updatedRecognitions) {
+                telemetry.addData("Detected Image", recognition.getLabel());
+            }
+
 
             telemetry.addData("Encoder Pos",String.valueOf(robot.octopusMotor.getCurrentPosition()));
             telemetry.addData("PID SP M1", robot.octopusMotor.getTargetPosition());
@@ -99,8 +133,38 @@ public class DemoTeleOp extends LinearOpMode {
 
 
         }
+    }/**
+     * Initialize the Vuforia localization engine.
+     */
+    private void initVuforia() {
+        /*
+         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
+         */
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        parameters.cameraName = hardwareMap.get(WebcamName.class, "webcam");
+
+        //  Instantiate the Vuforia engine
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
     }
 
+    /**
+     * Initialize the TensorFlow Object Detection engine.
+     */
+    private void initTfod() {
+        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        tfodParameters.minResultConfidence = 0.75f;
+        tfodParameters.isModelTensorFlow2 = true;
+        tfodParameters.inputSize = 300;
+        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
 
+        // Use loadModelFromAsset() if the TF Model is built in as an asset by Android Studio
+        // Use loadModelFromFile() if you have downloaded a custom team model to the Robot Controller's FLASH.
+        tfod.loadModelFromAsset(TFOD_MODEL_FILE, LABELS);
+        // tfod.loadModelFromFile(TFOD_MODEL_FILE, LABELS);
+    }
 
 }
