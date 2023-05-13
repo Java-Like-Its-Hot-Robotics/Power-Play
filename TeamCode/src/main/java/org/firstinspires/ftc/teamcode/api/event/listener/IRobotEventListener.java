@@ -1,15 +1,21 @@
 package org.firstinspires.ftc.teamcode.api.event.listener;
 
+import com.google.common.base.Function;
+
+import org.firstinspires.ftc.teamcode.api.event.RobotEventI;
 import org.firstinspires.ftc.teamcode.api.event.mediator.IRobotEventMediator;
-import org.firstinspires.ftc.teamcode.api.event.RobotEvent;
 
 import java.util.concurrent.Callable;
 
-public interface IRobotEventListener {
-    void handleEvent(RobotEvent robotEvent);
-    void initHandshake(IRobotEventMediator mediator);
+import kotlin.Unit;
+
+public interface IRobotEventListener<T extends Enum<T>> {
+    void handleEvent(RobotEventI<T> robotEventI);
+    Function<RobotEventI<T>, Unit> getEventHandler();
+    IRobotEventListener<T> addEventHandler(Function<RobotEventI<T>, Unit> eventHandler);
+    void initHandshake(IRobotEventMediator<T> mediator);
 
     //TODO: move this into its own interface
-    void notify(RobotEvent robotEvent);
-    void notifyWhen(RobotEvent robotEvent, Callable<Boolean> condition);
+    void notify(RobotEventI<T> robotEventI);
+    void notifyWhen(RobotEventI<T> robotEventI, Callable<Boolean> condition);
 }

@@ -1,41 +1,64 @@
 package org.firstinspires.ftc.teamcode.api.event.listener.discrete;
 
-import org.firstinspires.ftc.teamcode.api.event.RobotEvent;
+import com.google.common.base.Function;
+
+import org.firstinspires.ftc.teamcode.api.event.RobotEventI;
+import org.firstinspires.ftc.teamcode.api.event.listener.EventHandlerManager;
 import org.firstinspires.ftc.teamcode.api.event.listener.IRobotEventListener;
 import org.firstinspires.ftc.teamcode.api.event.mediator.IRobotEventMediator;
 
 import java.util.concurrent.Callable;
 
-public abstract class DiscreteEventListener implements IRobotEventListener {
-    private IRobotEventMediator mediator;
+import kotlin.Unit;
+
+public abstract class DiscreteEventListener<T extends Enum<T>> implements IRobotEventListener<T> {
+    private IRobotEventMediator<T> mediator;
+    private EventHandlerManager<T> eventHandlerManager = new EventHandlerManager();
+//    private
     private double pressTime = 0;
 
     public DiscreteEventListener() {}
 
     @Override
-    public void initHandshake(IRobotEventMediator mediator) {
+    public void initHandshake(IRobotEventMediator<T> mediator) {
         this.mediator = mediator;
     }
 
-    public IRobotEventMediator getMediator() {
+    public IRobotEventMediator<T> getMediator() {
         return mediator;
     }
 
     @Override
-    public void notify(RobotEvent robotEvent) {
-        mediator.notify(robotEvent);
+    public void notify(RobotEventI<T> robotEventI) {
+        mediator.notify(robotEventI);
     }
 
     @Override
-    public void notifyWhen(RobotEvent robotEvent, Callable<Boolean> condition) {
-        mediator.notifyWhen(robotEvent, condition);
+    public void notifyWhen(RobotEventI<T> robotEventI, Callable<Boolean> condition) {
+        mediator.notifyWhen(robotEventI, condition);
     }
 
     public boolean preventRepeatFor(double timeout) {
         if(System.currentTimeMillis() > pressTime + timeout) {
             pressTime = System.currentTimeMillis();
-            return true;
+            return false;
         }
-        return false;
+        return true;
+    }
+    //////////////////////////EVENT HANDLER////////////////////
+    @Override
+    public Function<RobotEventI<T>, Unit> getEventHandler() {
+        return eventHandlerManager.getComposedHandler();
+    }
+
+    @Override
+    public IRobotEventListener<T> addEventHandler(Function<RobotEventI<T>, Unit> eventHandler) {
+        eventHandlerManager.add(eventHandler);
+        return this;
+    }
+
+    @Override
+    public void handleEvent(RobotEventI<T> robotEventI) {
+        getEventHandler().apply(robotEventI);
     }
 }

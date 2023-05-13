@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.hardware.rev.RevTouchSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -35,6 +36,7 @@ public abstract class BotConfig {
     public Servo octopusServo = null;
     public BNO055IMU imu = null;
     public RevTouchSensor octoTouchSensor = null;
+    public RevColorSensorV3 colorSensor = null;
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -85,10 +87,10 @@ public abstract class BotConfig {
         octopusMotor2 = hwMap.get(DcMotorEx.class, "octopusMotor2");
         //default PID coefficients are p=10, i=0.050003, d=0, f=0
         PIDFCoefficients velCoefficients = new PIDFCoefficients(
-                10,
+                13,
                 3,
-                2,
-                75, //feed forward
+                1,
+                150, //feed forward
                 MotorControlAlgorithm.PIDF
         );
         PIDFCoefficients posCoefficients = new PIDFCoefficients(
@@ -99,7 +101,7 @@ public abstract class BotConfig {
         octopusMotor2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, velCoefficients);
         octopusMotor2.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, posCoefficients);
 
-        //what happens when they dont have a power set
+        //what happens when they don't have a power set
         octopusMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         octopusMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
@@ -111,6 +113,7 @@ public abstract class BotConfig {
         octopusServo = hwMap.get(Servo.class, "octopusServo");
         ////Sensors
         octoTouchSensor = hwMap.get(RevTouchSensor.class, "octopusTouchSensor");
+        colorSensor = hwMap.get(RevColorSensorV3.class, "colorSensor");
         //IMU SETUP
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
@@ -163,4 +166,10 @@ public abstract class BotConfig {
     }
 
 
+    public void driveWithEncoder(int frontLeft, int frontRight, int backLeft, int backRight) {
+        leftFront.setTargetPosition(leftFront.getTargetPosition()   + frontLeft);
+        leftBack.setTargetPosition(leftBack.getTargetPosition()     + backLeft);
+        rightFront.setTargetPosition(rightFront.getTargetPosition() + frontRight);
+        rightBack.setTargetPosition(rightBack.getTargetPosition()   + backRight);
+    }
 }

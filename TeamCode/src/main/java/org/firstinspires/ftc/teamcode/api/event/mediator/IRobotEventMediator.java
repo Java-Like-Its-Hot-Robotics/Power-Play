@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.api.event.mediator;
 
-import org.firstinspires.ftc.teamcode.api.event.RobotEvent;
+import org.firstinspires.ftc.teamcode.api.event.RobotEventI;
 
 import java.util.concurrent.Callable;
 
-public interface IRobotEventMediator {
-    void notify(RobotEvent robotEvent);
-    void notifyWhen(RobotEvent robotEvent, Callable<Boolean> condition);
+public interface IRobotEventMediator<T extends Enum<T>> {
+    void notify(RobotEventI<T> robotEventI);
+    void notifyWhen(RobotEventI<T> robotEventI, Callable<Boolean> condition);
 }

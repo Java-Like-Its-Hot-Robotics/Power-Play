@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.api.event;
 
-//this could be refactored into more classes with visitor pattern,
-//but that is a lot of work and is terribly ugly
-public enum RobotEvent {
+public enum RobotEvent implements RobotEventI<RobotEvent> {
     NullEvent,
     //Opmode
     OpmodeInit,
@@ -39,6 +37,31 @@ public enum RobotEvent {
     //Debug
     DebugOctoMotorUp,
     DebugOctoMotorDown,
-    //misc or unused
-    ConeGuideLightSensorDetected
+    ColorSensorDetectRed, //misc or unused
+    ColorSensorDetectBlue, ConeGuideLightSensorDetected;
+
+    @Override
+    public RobotEvent isNull() {
+        return NullEvent;
+    }
+
+    @Override
+    public RobotEvent getValue() {
+        return this;
+    }
+
+    @Override
+    public RobotEvent getInit() {
+        return OpmodeInit;
+    }
+
+    @Override
+    public RobotEvent getStart() {
+        return OpmodeStart;
+    }
+
+    @Override
+    public RobotEvent getStop() {
+        return OpmodeStart;
+    }
 }
